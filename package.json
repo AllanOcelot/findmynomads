@@ -1,0 +1,23 @@
+{
+  "name": "findmynomads.com",
+  "version": "1.0.0",
+  "description": "A tool used to help teams of remote works contact each other",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Allan McKernan <allan@workofcode.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@aquafadas/gulp-php-minify": "^0.3.1",
+    "browser-sync": "^2.18.13",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-imagemin": "^3.3.0",
+    "gulp-merge": "^0.1.1",
+    "gulp-minify": "^1.0.0",
+    "gulp-sass": "^3.1.0",
+    "merge-stream": "^1.0.1"
+  }
+}

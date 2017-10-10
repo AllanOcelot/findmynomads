@@ -1,0 +1,9 @@
+# ignore DB files
+src/functions/DB_companies.php
+src/functions/DB_users.php
+dist/functions/DB_companies.php
+dist/functions/DB_users.php
+
+
+#Ignore Node Modules
+**/node_modules/

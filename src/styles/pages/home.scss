@@ -1,0 +1,150 @@
+@import '../global/variables';
+
+
+body{
+  &.home{
+    background-size: cover;
+    background-position: bottom left;
+    background-image: url('../images/landing_background_1.png');
+    position: relative;
+
+    &:after{
+      content:'';
+      position: fixed;
+      top:0;
+      left:0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.20);
+      box-shadow: inset 0 0 20px 0 #000000;
+    }
+
+
+    //The centered text container on the home screen is called  'Introduction'
+    .introduction{
+      position: absolute;
+      top: 0%;
+      left:50%;
+      width: 500px;
+      margin-left: -250px;
+      text-align: center;
+      z-index: 10;
+      opacity: 0;
+      z-index: -1;
+      transition: all 0.6s;
+
+      @media screen and (max-width: 910px){
+        width: 100%;
+        margin-left: 0;
+      }
+
+      h3{
+        float:left;
+        width: 100%;
+        font-family: $handWritten;
+        color:#fff;
+        text-shadow: 0px 3px 2px rgba(0,0,0,0.7);
+        font-size: 60px;
+        cursor: default;
+        padding: 0;
+        font-weight: 100;
+        margin: 0 0 5px 0;
+      }
+
+      //Forms
+      .input-container{
+        float: left;
+        width: 100%;
+        height: auto;
+        margin: 0 0 20px 0;
+
+        label{
+          float:left;
+          width: 100%;
+          font-size: 20px;
+          font-weight: 400;
+          margin: 0 0 10px 0;
+          text-align: left;
+          text-shadow: 0px 3px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        .text ,  select{
+          line-height: 50px;
+          width: 100%;
+          text-align: left;
+          background: rgba(255,255,255,0.8);
+          color: #000;
+          font-size: 16px;
+          border: none;
+          font-weight: 300;
+          letter-spacing: 2px;
+          padding: 0 20px;
+          border:2px solid #fff;
+          box-shadow: 0px 1px 2px rgba(0,0,0,0.8);
+          transition: border 0.3s;
+          &.error{
+            border:2px solid red;
+          }
+          &.active{
+            border:2px solid $green_light;
+          }
+
+          &:focus, &:active, &:hover{
+            outline: none;
+          }
+        }
+        select{
+          height: 50px;
+          border-radius: 0px;
+          text-indent: 20px;
+        }
+      }
+
+      .button-container{
+        float:left;
+        width: 100%;
+        height: auto;
+        text-align: center;
+      }
+
+      p{
+        float: left;
+        width: 100%;
+        font-size: 20px;
+        line-height: 30px;
+        cursor: default;
+        text-shadow: 0px 3px 2px rgba(0,0,0,0.7);
+        margin: 0 0 30px 0;
+      }
+
+      &.active{
+        top:50%;
+        z-index: 1;
+        opacity: 1;
+        transition: top 3s opacity 4s;
+      }
+
+    }
+  }
+}
+
+///Made by banner
+.project_banner_details{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  color: #fff;
+  font-size: 14px;
+  z-index: 100;
+  opacity: 0.8;
+  transition: all 0.3s;
+  cursor: default;
+  &:hover{
+    opacity: 1;
+  }
+  a{
+    color:#fff;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
