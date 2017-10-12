@@ -19,6 +19,10 @@ function show_login_error(option){
     alert('Youve tried to log in more than 25 times. Try again tommorow.');
   }else{
     //User entered invalid syntax for their email
+    if(option == 0.5){
+      alert("You must select your type of account.");
+    }
+    //User entered invalid syntax for their email
     if(option == 1){
       alert("It looks like your email address is not valid.");
     }
@@ -38,6 +42,9 @@ function show_login_error(option){
     }
     if(option == 8){
       alert('Password needs to be longer than five charactrs');
+    }
+    if(option == 9){
+      alert('Please ensure your details are correct');
     }
   }
 }

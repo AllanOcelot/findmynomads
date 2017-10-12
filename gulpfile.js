@@ -61,16 +61,7 @@
        stream: true
      }))
   });
-
-
-
-
-
-
-
-
-
-
+  
   //browserSync Task
   gulp.task('browserSync', function() {
     browserSync.init({
@@ -80,12 +71,10 @@
     })
   });
 
-
-
 ///////// Watchers
 gulp.task('watch', ['browserSync' , 'minify-styling' , 'copy-php-files'],  function(){
   gulp.watch('src/images/*.*', ['minify-images']);
   gulp.watch('src/styles/**/*.scss', ['minify-styling']);
   gulp.watch('src/scripts/**/*.js', ['minify-js']);
-  gulp.watch('src/**/*.php', ['copy-php-files']); 
+  gulp.watch('src/**/*.php', ['copy-php-files']);
 });

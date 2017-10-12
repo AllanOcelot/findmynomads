@@ -30,13 +30,14 @@ session_start();
       $stmt->execute();
       $stmt->bind_result($company_name , $user_password , $ID);
     }
-      while($stmt->fetch()) {
+
+      while($stmt->fetch()) { 
         if(password_verify($user_pass, $user_password)){
-          echo "User has logged in Thank you.";
           $_SESSION["user_id"] = $ID;
           $_SESSION["type"]    = $user_type;
-        }else{ 
-          echo "Invalid Credentials";
+          echo "User has logged in Thank you.";
+        }else{
+          echo "ERROR: LOGIN INVALID";
         }
       }
 

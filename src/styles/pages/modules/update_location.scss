@@ -1,0 +1,88 @@
+@import '../../global/variables';
+///////////////////
+//////// The module that shows when a user clicks on 'update location'
+///////////////////
+
+.update_location_information{
+  position: fixed;
+  width: 300px;
+  height: 245px;
+  top:50%;
+  right:0;
+  margin-top: -122px;
+  background-color: #fff;
+  border-radius: 6px 0px 0 6px;
+  z-index: 200;
+  color:#000;
+  text-align: center;
+  display: none;
+  box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+  padding: 20px;
+
+  .close{
+    position: absolute;
+    top:-25px;
+    left:-25px;
+    z-index: 300;
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    background-color: #fff;
+    border: 1px solid #000;
+    cursor: pointer;
+    border-radius: 50%;
+    text-align: center;
+    i{
+      font-size: 40px;
+      line-height: 49px;
+      transition: all 0.3s;
+    }
+    &:hover{
+      i{
+        font-size: 42px;
+        color: #E56449;
+      }
+    }
+  }
+
+  h4{
+    float:left;
+    width: 100%;
+    margin: 0 0 20px 0;
+    font-family: $handWritten;
+    text-align: center;
+    font-size: 34px;
+    cursor: default;
+  }
+
+  p{
+    float:left;
+    width: 100%;
+    text-align: center;
+    color:#000;
+    font-size: 16px;
+    line-height: 26px;
+    margin: 0 0 20px 0;
+  }
+
+  .button{
+    float:left;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    border: 1px solid #000;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 10px;
+    font-weight: 900;
+    border-radius: 3px;
+    background-color: #B1EF56;
+    text-transform: uppercase;
+    color:#000;
+    &:hover{
+      background-color: #BAF266;
+    }
+  }
+}

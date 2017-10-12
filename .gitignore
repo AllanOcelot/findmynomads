@@ -7,3 +7,5 @@ dist/functions/DB_users.php
 
 #Ignore Node Modules
 **/node_modules/
+**/*.key
+**/*.crt

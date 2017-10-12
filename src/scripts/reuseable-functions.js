@@ -58,20 +58,14 @@ function check_user_session(){
   .done(function( data ) {
     if(data){
       user_logged_in = true;
+      console.log("Welcome back");
     }else{
       user_logged_in = false;
+      console.log("You do not exist.");
     }
     init_all();
   });
 }
-
-
-
-
-
-
-
-
 
 
 //  ███╗***███╗*█████╗*██╗███╗***██╗****██╗███╗***██╗██╗████████╗
@@ -86,12 +80,10 @@ function check_user_session(){
 //Function to instigate everything
 function init_all(){
 
-
   var myNode = document.getElementById("find-my-nomads-main");
   while (myNode.firstChild) {
       myNode.removeChild(myNode.firstChild);
   }
-
 
   if(user_logged_in == true){
 
@@ -140,9 +132,11 @@ function init_all(){
     });
 
 
-    /////////////////
-    /////// LOGIN CODE
-    ////////////////
+
+
+        /////////////////
+        /////// LOGIN CODE
+        ////////////////
 
         //User clicks to display the login form
         appContainer.on('click', '.request-login', function(){
@@ -153,6 +147,7 @@ function init_all(){
         function validate_user_type(){
           var input = $('#usr_type').val();
           if(input == -1){
+            show_login_error(0.5);
             return false;
           }else{
             if(input == 'digital_nomad' || input == 'company'){
@@ -166,6 +161,7 @@ function init_all(){
         //Check the user input (email) containers no crazy or weird shit
         function validate_username_input(){
           var input = $('#usr_email').val();
+          console.log(input);
           if(input.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
             return input;
           }else{
@@ -200,7 +196,10 @@ function init_all(){
              url: "/functions/check_user.php",
             })
             .done(function( data ) {
-              check_user_session();
+              //IF the data returned tells us it's all valid, continue to check_user_session as this will show the map page
+              console.log(data);
+              //check_user_session();
+
             });
           }else{
             return false;
@@ -212,20 +211,20 @@ function init_all(){
           check_user();
         });
 
-    ////////////////////
-    ///// END OF LOGIN CODE
-    ///////////////////
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    ///////////////////
-    ////// REGISTER CODE
-    ///////////////////
+        ////////////////////
+        ///// END OF LOGIN CODE
+        ///////////////////
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        ///////////////////
+        ////// REGISTER CODE
+        ///////////////////
 
       //user clicks register button
       appContainer.on('click', '.request-register', function(){
@@ -327,13 +326,13 @@ function build_map(){
         animation: google.maps.Animation.DROP,
         position: starting_location,
         icon: {
-          path: 'google.maps.SymbolPath.BACKWARD_OPEN_ARROW',
-          fillOpacity: 0,
+          path: google.maps.SymbolPath.CIRCLE,
+          fillOpacity: 0.2,
           fillColor: '#fff',
           strokeOpacity: 1.0,
-          strokeColor: '#ff8e3b',
-          strokeWeight: 4.0,
-          scale: 5 //pixels
+          //strokeColor: data[i]['Colour'],
+          strokeWeight: 5.0,
+          scale: 20 //pixels
         }
     });
 
@@ -342,12 +341,7 @@ function build_map(){
       marker_current_position.setPosition(marker_current_position.getPosition());
     });
 
-
     draw_all_staff_in_user_comapny();
-
-
-
-
 
     function geocode_current_location_pin(pos){
        geocoder = new google.maps.Geocoder();
@@ -407,17 +401,12 @@ function build_map(){
                     place_id : place_id,
                   };
 
-                  console.log(new_longLat);
-
-
-
                   $('#map_preloader').slideUp(300,function(){
                     $('.update_location_information .location_name').text("" + city + ", " + country_name);
                     //Display information about this location
                     $('.information-overlay').addClass('hidden');
                     $('.update_location_information').slideDown(300);
                   });
-
                 }
                 else
                 {
@@ -515,11 +504,12 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
   //Open add new location
   appContainer.on('click', '#add-location-button', function(){
     $('.information-overlay').addClass('hidden');
-    $('#add_location_container').fadeIn(600);
+    $('#add_location_container').addClass('active');
   });
   //Close add new location
   appContainer.on('click' , '#add_location_container .close', function(){
     $('#add_location_container').fadeOut(600, function(){
+      $('#add_location_container').removeClass('active');
       $('.information-overlay').removeClass('hidden');
     });
   });
@@ -546,7 +536,6 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
      url: "/functions/update_user_location.php",
     })
     .done(function( data ) {
-      console.log('New location saved');
       map.setZoom(4);
       $('.update_location_information').fadeOut(300, function(){
         $('.information-overlay').removeClass('hidden');
@@ -555,6 +544,7 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
   });
 
   //If user clicks close instead, we want to set things to null etc
+  //This is super bad code - why is this closing everything?
   appContainer.on('click', '.close', function(){
     $('.update_location_information').fadeOut(300, function(){
       map.setCenter(starting_location);
@@ -565,6 +555,13 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
     });
   });
 
+  //////////////////////
+  ////////// USER SETTINGS
+  appContainer.on('click', '#user-settings', function(){
+    //Fade in the user settings panel
+    $('.information-overlay').addClass('hidden');
+    $('.update_user_settings').fadeIn(600);
+  });
 
 
 
