@@ -22,8 +22,14 @@
 
   &.active{
     top:50%;
-    opacity: 1; 
+    opacity: 1;
     transition: all 1s;
+  }
+
+  &.right{
+    right:0; 
+    margin-right: 0;
+    transition: all 0.3s;
   }
 
   .close{

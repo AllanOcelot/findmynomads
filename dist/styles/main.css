@@ -496,6 +496,11 @@ body.home .introduction.active {
   opacity: 1;
   transition: all 1s; }
 
+#add_location_container.right {
+  right: 0;
+  margin-right: 0;
+  transition: all 0.3s; }
+
 #add_location_container .close {
   position: absolute;
   top: -25px;

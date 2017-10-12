@@ -435,7 +435,10 @@ function change_map_location(long,lat){
 
 function codeAddress() {
    var address = document.getElementById('search_location_api').value;
+
+   //We GEOcode the user's location using the googel maps api
    geocoder.geocode( { 'address': address}, function(results, status) {
+     //If it's a valid address, we proceed
      if (status == 'OK') {
 
        $('#search_location_api').slideUp(300,function(){
@@ -446,20 +449,66 @@ function codeAddress() {
        $('#search_new_location_button').text("Yup, that's it!").removeClass('default').addClass('active');
 
        //Move the 'new location' out of the way
-       $('#add_location_container').addClass('active');
+       $('#add_location_container').addClass('right');
 
-       //repositon map
-       map.setCenter(results[0].geometry.location);
-       map.setZoom(12);
+       //The URL we want to query to get the nearest road point
+       var marker_user_add_location;
+       var long = results[0].geometry.location.lng();
+       var lat = results[0].geometry.location.lat();
+       var new_point = "" + lat + "," + long;
 
-       new_location_object = {
-         name : results[0].address_components[0].long_name,
-         city : results[0].address_components[2].long_name,
-         formatted : results[0].formatted_address,
-         location : results[0].geometry.location,
-         place_id : results[0].place_id,
-       };
-     } else {
+       //console.log(results[0].geometry.location.lng());
+       //console.log(results[0].geometry.location);
+       var google_roads_response = "https://roads.googleapis.com/v1/nearestRoads?points=" + new_point + "&key=AIzaSyCjp6Sn-zK4IMI3DRfGO42gfieXo3xKvYQ";
+
+       $.ajax({
+        type: "POST",
+        url: google_roads_response,
+       })
+       .done(function( data ) {
+         console.log(data);
+         var lat = data.snappedPoints[0].location.latitude;
+         var lng = data.snappedPoints[0].location.longitude;
+
+         var newLatLong = {lat:lat,lng:long};
+
+         //Create a draggable marker for the location, incase they need to refine it.
+         marker_user_add_location = new google.maps.Marker({
+             map:map,
+             draggable:true,
+             animation: google.maps.Animation.DROP,
+             position: newLatLong,
+         });
+
+         google.maps.event.addListener(marker_user_add_location, 'dragend', function(){
+          // geocode_current_location_pin(marker_current_position.getPosition());
+          // marker_current_position.setPosition(marker_current_position.getPosition());
+          console.log('Pin has been dragged');
+         }); 
+
+         map.setCenter(newLatLong);
+         map.setZoom(12);
+
+
+       });
+
+
+
+
+
+
+
+
+      // new_location_object = {
+      //   name : results[0].address_components[0].long_name,
+      //   city : results[0].address_components[2].long_name,
+      //   formatted : results[0].formatted_address,
+      //   location : results[0].geometry.location,
+      //   place_id : results[0].place_id,
+      // };
+     }
+     //The address the user' gave is not recognised by google. Somthing is wrong.
+     else {
        //Chang the button
        $('#search_new_location_button').text("Oops, No results!").removeClass('active').addClass('default');
 
@@ -489,7 +538,7 @@ appContainer.on('click', '#search_new_location_button', function(){
 
 
 appContainer.on('click', '#search_new_location_button_try_again', function(){
-  $('#add_location_container').removeClass('active');
+  $('#add_location_container').removeClass('right');
   $('#search_location_api').val('');
   $('#search_new_location_button').text('Search').removeClass('active').addClass('default');
   $('#search_new_location_button_try_again').slideUp(300, function(){
@@ -509,7 +558,7 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
   //Close add new location
   appContainer.on('click' , '#add_location_container .close', function(){
     $('#add_location_container').fadeOut(600, function(){
-      $('#add_location_container').removeClass('active');
+      $('#add_location_container').removeClass('active').removeClass('right');
       $('.information-overlay').removeClass('hidden');
     });
   });
