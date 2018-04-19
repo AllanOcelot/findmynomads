@@ -131,7 +131,6 @@ function init_all(){
       appContainer.append(data);
       //Show the default landing section
       show_selection("default");
-      resize_introduction();
     });
 
 
@@ -245,6 +244,9 @@ function init_all(){
             if(check_company_email_valid()){
               //Check they have provided a password
               if(check_company_password_valid()){
+                console.log( $('#company_name').val() );
+                console.log( $('#new_email_address').val() );
+                console.log( $('#new_company_password').val() );
                 //Create the account
                 $.ajax({
                  type: "GET",
@@ -254,12 +256,13 @@ function init_all(){
                    company_email    : $('#new_email_address').val(),
                    company_password : $('#new_company_password').val(),
                  },
-                 url: "/functions/register_company.php",
+                 url: "functions/register_company.php",
                 })
                 .done(function( data ) {
-
+                    console.log(data);
                 });
               }else{
+                alert('error at register script');
                 show_login_error(8);
               }
             }else{

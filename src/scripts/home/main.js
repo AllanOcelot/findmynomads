@@ -1,11 +1,6 @@
 //I don't want to bombard the server, so we only run checks on inputs after 5 seconds
 var lastTimeSinceUserInput = 5000;
 
-function resize_introduction(){
-  var new_margin =  "-" + $('.introduction.active').height() / 2 + "px";
-  $('.introduction.active').css('margin-top', new_margin);
-}
-
 function show_login_error(option){
 
   //We check to see if our login error cookie appears
@@ -50,17 +45,16 @@ function show_login_error(option){
 }
 
 function show_selection(item_to_display){
-  $('.introduction').removeClass('active');
+  $('.introduction').removeClass('active').css('display','none');
   if(item_to_display == "default"){
-    $('.introduction.default').addClass('active');
+    $('.introduction.default').css("display", "flex").addClass("active").hide().fadeIn();
   }
   if(item_to_display == "login"){
-    $('.introduction.login').addClass('active');
+    $('.introduction.login').css("display", "flex").addClass("active").hide().fadeIn();
   }
   if(item_to_display== "register"){
-    $('.introduction.register').addClass('active');
+    $('.introduction.register').css("display", "flex").addClass("active").hide().fadeIn();
   }
-  resize_introduction();
 }
 
 

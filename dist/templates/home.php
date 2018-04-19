@@ -26,7 +26,7 @@
                 <option value='-1'>Please select</option>
                 <option value='digital_nomad'>Digital Nomad</option>
                 <option value='company'>Team Owner</option>
-              </select> 
+              </select>
             </div>
             <div class='input-container'>
               <label for='usr_email'>Email Address:</label>
@@ -37,8 +37,8 @@
               <input type='password' name='usr_pass' class='text' id='usr_pass' placeholder=''>
             </div>
             <div class='button-container'>
-              <div class='app-button go_home'>Back?</div>
-              <input type='text' class='app-button' id='attempt_login' value='Login'>
+              <div class='app-button go_home back'>Back?</div>
+              <input type='text' class='app-button next' id='attempt_login' value='Login'>
             </div>
           </form>
         </div>
@@ -67,8 +67,8 @@
           </div>
 
           <div class='button-container'>
-            <div class='app-button go_home'>Back?</div>
-            <input type='text' class='app-button' id='attempt_create_new' value='Register'>
+            <div class='app-button go_home back'>Back?</div>
+            <input type='text' class='app-button next' id='attempt_create_new' value='Register'>
           </div>
 
           </form>

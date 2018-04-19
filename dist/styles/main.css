@@ -32,21 +32,21 @@ h1.main-logo {
   color: #fff;
   margin: 0 20px;
   background: none;
-  border: 2px solid #fff;
-  font-size: 16px;
+  border: 1px solid #fff;
+  font-size: 18px;
+  letter-spacing: 2px;
   line-height: 40px;
   height: 42px;
   cursor: pointer;
   width: 150px;
+  border-radius: 3px;
   display: inline-block;
-  letter-spacing: 4px;
-  transition: all 0.5s; }
+  transition: all 0.25s; }
 
 .app-button:hover {
-  transition: all 0.3s;
+  transition: all 0.2s;
   background: rgba(0, 0, 0, 0.8);
-  text-shadow: none;
-  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.8); }
+  text-shadow: none; }
 
 body.home {
   background-size: cover;
@@ -82,10 +82,7 @@ body.home .introduction {
   width: 500px;
   text-align: center;
   z-index: 10;
-  opacity: 0;
-  z-index: -1;
-  display: none;
-  transition: all 0.6s; }
+  opacity: 0; }
 
 @media screen and (max-width: 910px) {
   body.home .introduction {
@@ -114,21 +111,21 @@ body.home .introduction .input-container label {
   width: 100%;
   font-size: 20px;
   font-weight: 400;
-  margin: 0 0 10px 0;
+  margin: 0 0 5px 0;
   text-align: left; }
 
 body.home .introduction .input-container .text, body.home .introduction .input-container select {
-  line-height: 50px;
+  line-height: 40px;
   width: 100%;
+  font-size: 14px;
   text-align: left;
-  background: rgba(255, 255, 255, 0.8);
-  color: #000;
-  font-size: 16px;
+  background: #fff;
+  color: #171717;
   border: none;
   font-weight: 300;
-  letter-spacing: 2px;
-  padding: 0 20px;
+  padding: 0 10px;
   border: 2px solid #fff;
+  border-radius: 2px;
   transition: border 0.3s; }
 
 body.home .introduction .input-container .text.error, body.home .introduction .input-container select.error {
@@ -140,16 +137,26 @@ body.home .introduction .input-container .text.active, body.home .introduction .
 body.home .introduction .input-container .text:focus, body.home .introduction .input-container .text:active, body.home .introduction .input-container .text:hover, body.home .introduction .input-container select:focus, body.home .introduction .input-container select:active, body.home .introduction .input-container select:hover {
   outline: none; }
 
-body.home .introduction .input-container select {
-  height: 50px;
+body.home .introduction .input-container #usr_type {
+  height: 40px;
   border-radius: 0px;
-  text-indent: 20px; }
+  text-indent: 5px;
+  padding: 0;
+  cursor: pointer; }
 
 body.home .introduction .button-container {
   float: left;
   width: 100%;
   height: auto;
   text-align: center; }
+
+body.home .introduction .button-container .back {
+  float: left;
+  margin-left: 0; }
+
+body.home .introduction .button-container .next {
+  float: right;
+  margin-right: 0; }
 
 body.home .introduction p {
   float: left;
@@ -160,12 +167,9 @@ body.home .introduction p {
   margin: 0 0 30px 0; }
 
 body.home .introduction.active {
-  display: flex;
   justify-content: center;
   flex-direction: column;
-  z-index: 1;
-  opacity: 1;
-  transition: top 3s opacity 4s; }
+  opacity: 1; }
 
 .project_banner_details {
   position: fixed;
@@ -185,6 +189,24 @@ body.home .introduction.active {
   color: #fff;
   text-decoration: underline;
   cursor: pointer; }
+
+@media (max-width: 900px) {
+  body.home {
+    background-position: center bottom; }
+  body.home h1.main-logo {
+    font-size: 30px; }
+  body.home .introduction p {
+    font-size: 14px;
+    line-height: 24px;
+    margin-bottom: 10px; }
+  body.home .app-button {
+    margin: 0 10px;
+    width: 100px;
+    font-size: 14px; }
+  body.home .project_banner_details {
+    text-align: center;
+    width: 100%;
+    left: 0; } }
 
 #map_preloader {
   position: fixed;

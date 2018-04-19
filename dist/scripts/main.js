@@ -6,15 +6,6 @@ $('window').ready(function(){
   check_user_session();
 });
 
-//Fire the script when the page starts
-$('document').ready(function(){
-  resize_introduction();
-});
-
-$('winow').resize(function(){
-  resize_introduction();
-});
-
 //All of our app takes place inside this container
 var appContainer = $('#find-my-nomads-main');
 
@@ -148,7 +139,6 @@ function init_all(){
       appContainer.append(data);
       //Show the default landing section
       show_selection("default");
-      resize_introduction();
     });
 
 
@@ -262,6 +252,9 @@ function init_all(){
             if(check_company_email_valid()){
               //Check they have provided a password
               if(check_company_password_valid()){
+                console.log( $('#company_name').val() );
+                console.log( $('#new_email_address').val() );
+                console.log( $('#new_company_password').val() );
                 //Create the account
                 $.ajax({
                  type: "GET",
@@ -271,12 +264,13 @@ function init_all(){
                    company_email    : $('#new_email_address').val(),
                    company_password : $('#new_company_password').val(),
                  },
-                 url: "/functions/register_company.php",
+                 url: "functions/register_company.php",
                 })
                 .done(function( data ) {
-
+                    console.log(data);
                 });
               }else{
+                alert('error at register script');
                 show_login_error(8);
               }
             }else{
@@ -1046,17 +1040,16 @@ function show_login_error(option){
 }
 
 function show_selection(item_to_display){
-  $('.introduction').removeClass('active');
+  $('.introduction').removeClass('active').css('display','none');
   if(item_to_display == "default"){
-    $('.introduction.default').addClass('active');
+    $('.introduction.default').css("display", "flex").addClass("active").hide().fadeIn();
   }
   if(item_to_display == "login"){
-    $('.introduction.login').addClass('active');
+    $('.introduction.login').css("display", "flex").addClass("active").hide().fadeIn();
   }
   if(item_to_display== "register"){
-    $('.introduction.register').addClass('active');
+    $('.introduction.register').css("display", "flex").addClass("active").hide().fadeIn();
   }
-  resize_introduction();
 }
 
 

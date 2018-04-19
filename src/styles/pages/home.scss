@@ -41,9 +41,6 @@ body{
       text-align: center;
       z-index: 10;
       opacity: 0;
-      z-index: -1;
-      display: none;
-      transition: all 0.6s;
 
       @media screen and (max-width: 910px){
         width: 100%;
@@ -74,22 +71,22 @@ body{
           width: 100%;
           font-size: 20px;
           font-weight: 400;
-          margin: 0 0 10px 0;
+          margin: 0 0 5px 0;
           text-align: left;
         }
 
         .text ,  select{
-          line-height: 50px;
+          line-height: 40px;
           width: 100%;
+          font-size: 14px;
           text-align: left;
-          background: rgba(255,255,255,0.8);
-          color: #000;
-          font-size: 16px;
+          background: #fff;
+          color: #171717;
           border: none;
           font-weight: 300;
-          letter-spacing: 2px;
-          padding: 0 20px;
-          border:2px solid #fff;
+          padding: 0 10px;
+          border: 2px solid #fff;
+          border-radius: 2px;
           transition: border 0.3s;
           &.error{
             border:2px solid red;
@@ -102,10 +99,13 @@ body{
             outline: none;
           }
         }
-        select{
-          height: 50px;
+
+        #usr_type{
+          height: 40px;
           border-radius: 0px;
-          text-indent: 20px;
+          text-indent: 5px;
+          padding: 0;
+          cursor: pointer;
         }
       }
 
@@ -114,6 +114,16 @@ body{
         width: 100%;
         height: auto;
         text-align: center;
+
+        .back {
+          float: left;
+          margin-left: 0;
+        }
+
+        .next {
+          float: right;
+          margin-right: 0;
+        }
       }
 
       p{
@@ -126,12 +136,9 @@ body{
       }
 
       &.active{
-        display: flex;
         justify-content: center;
         flex-direction: column;
-        z-index: 1;
         opacity: 1;
-        transition: top 3s opacity 4s;
       }
 
     }
@@ -156,5 +163,35 @@ body{
     color:#fff;
     text-decoration: underline;
     cursor: pointer;
+  }
+}
+
+//Mobile
+@media (max-width: 900px) {
+  body.home{
+    background-position: center bottom;
+
+    h1.main-logo {
+      font-size: 30px;
+    }
+
+    .introduction p {
+      font-size: 14px;
+      line-height: 24px;
+      margin-bottom: 10px;
+    }
+
+    .app-button {
+      margin: 0 10px;
+      width: 100px;
+      font-size: 14px;
+    }
+
+    .project_banner_details{
+      text-align: center;
+      width: 100%;
+      left: 0;
+    }
+
   }
 }

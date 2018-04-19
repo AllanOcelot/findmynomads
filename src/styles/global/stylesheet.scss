@@ -36,20 +36,20 @@ h1.main-logo{
   color:#fff;
   margin: 0 20px;
   background: none;
-  border: 2px solid #fff;
-  font-size: 16px;
+  border: 1px solid #fff;
+  font-size: 18px;
+  letter-spacing: 2px;
   line-height: 40px;
   height: 42px;
   cursor: pointer;
   width: 150px;
+  border-radius: 3px;
   display: inline-block;
-  letter-spacing: 4px;
-  transition: all 0.5s;
+  transition: all 0.25s;
 
   &:hover{
-    transition: all 0.3s;
+    transition: all 0.2s;
     background: rgba(0,0,0,0.8);
     text-shadow: none;
-    box-shadow: 2px 2px 2px rgba(0,0,0,0.8);
   }
 }
