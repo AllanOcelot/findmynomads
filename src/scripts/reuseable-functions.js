@@ -48,6 +48,7 @@ function createCookie(name,value,days) {
 //  **************************************************************************************************
 
 function check_user_session(){
+  /*
   $.ajax({
    type: "GET",
    data: {
@@ -65,6 +66,10 @@ function check_user_session(){
     }
     init_all();
   });
+  */
+
+  user_logged_in = false;
+  init_all();
 }
 
 
@@ -117,18 +122,16 @@ function init_all(){
   // END OF LOGGED IN CODE
   }else{
   // START OF NOT LOGGED IN (HOME) CODE
-
-
-    //Get the home template
+  //Get the home template
     $.ajax({
-     type: "GET",
-     url: "/templates/home.php",
-    })
-    .done(function( data ) {
+      type: "GET",
+      url: "templates/home.php",
+    }).done(function( data ) {
       //Add the template to the page
       appContainer.append(data);
       //Show the default landing section
       show_selection("default");
+      resize_introduction();
     });
 
 
@@ -484,7 +487,7 @@ function codeAddress() {
           // geocode_current_location_pin(marker_current_position.getPosition());
           // marker_current_position.setPosition(marker_current_position.getPosition());
           console.log('Pin has been dragged');
-         }); 
+         });
 
          map.setCenter(newLatLong);
          map.setZoom(12);

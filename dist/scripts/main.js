@@ -1002,11 +1002,6 @@ function log_out_user(){
 //I don't want to bombard the server, so we only run checks on inputs after 5 seconds
 var lastTimeSinceUserInput = 5000;
 
-function resize_introduction(){
-  var new_margin =  "-" + $('.introduction.active').height() / 2 + "px";
-  $('.introduction.active').css('margin-top', new_margin);
-}
-
 function show_login_error(option){
 
   //We check to see if our login error cookie appears

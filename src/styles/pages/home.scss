@@ -7,6 +7,21 @@ body{
     background-position: bottom left;
     background-image: url('../images/landing_background_1.png');
     position: relative;
+    height: 100%;
+    min-height: 100%;
+
+    #find-my-nomads-main {
+      height: 100%;
+      min-height: 100%;
+      width: 100%;
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
     &:after{
       content:'';
@@ -16,21 +31,18 @@ body{
       width: 100%;
       height: 100%;
       background: rgba(0,0,0,0.20);
-      box-shadow: inset 0 0 20px 0 #000000;
+      box-shadow: inset 0 0 20px 0 rgba(0,0,0,0.2);
     }
 
 
     //The centered text container on the home screen is called  'Introduction'
     .introduction{
-      position: absolute;
-      top: 0%;
-      left:50%;
       width: 500px;
-      margin-left: -250px;
       text-align: center;
       z-index: 10;
       opacity: 0;
       z-index: -1;
+      display: none;
       transition: all 0.6s;
 
       @media screen and (max-width: 910px){
@@ -43,7 +55,6 @@ body{
         width: 100%;
         font-family: $handWritten;
         color:#fff;
-        text-shadow: 0px 3px 2px rgba(0,0,0,0.7);
         font-size: 60px;
         cursor: default;
         padding: 0;
@@ -65,7 +76,6 @@ body{
           font-weight: 400;
           margin: 0 0 10px 0;
           text-align: left;
-          text-shadow: 0px 3px 2px rgba(0, 0, 0, 0.7);
         }
 
         .text ,  select{
@@ -80,7 +90,6 @@ body{
           letter-spacing: 2px;
           padding: 0 20px;
           border:2px solid #fff;
-          box-shadow: 0px 1px 2px rgba(0,0,0,0.8);
           transition: border 0.3s;
           &.error{
             border:2px solid red;
@@ -113,12 +122,13 @@ body{
         font-size: 20px;
         line-height: 30px;
         cursor: default;
-        text-shadow: 0px 3px 2px rgba(0,0,0,0.7);
         margin: 0 0 30px 0;
       }
 
       &.active{
-        top:50%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
         z-index: 1;
         opacity: 1;
         transition: top 3s opacity 4s;
