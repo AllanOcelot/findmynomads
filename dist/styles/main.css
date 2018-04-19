@@ -53,7 +53,8 @@ body.home {
   background-size: cover;
   background-position: bottom left;
   background-image: url("../images/landing_background_1.png");
-  position: relative; }
+  position: relative;
+  min-height: 100%; }
 
 body.home:after {
   content: '';
