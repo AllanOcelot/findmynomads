@@ -6,17 +6,14 @@
 .information-overlay{
   position: fixed;
   width: 323px;
-  left:0;
+  right:-323px;
   top:0;
   height: 100%;
   background-color: #fff;
-  border-radius: 0 4px 4px 0;
-  box-shadow: 4px 4px 4px rgba(0,0,0,0.5);
   z-index: 200;
-  display: none;
   overflow: hidden;
   color:#000;
-  transition: all 0.5s;
+  transition: all 0.2s;
 
   &.hidden{
     left:-100%;
@@ -24,23 +21,8 @@
     width: 0px;
     height: 0px;
     transition: left 0.3s all 1s;
-  }
 
-  h3.title{
-    float:left;
-    width: 100%;
-    text-align: center;
-    font-size: 30px;
-    line-height: normal;
-    padding: 10px 0;
-    margin: 0;
-    border-bottom: 1px solid rgba(0,0,0,0.5);
-    font-family: $handWritten;
-    transition: all 0.4s;
-  }
-
-  &.hidden{
-    h3.title{
+    h3.title {
       position: fixed;
       left: 50%;
       width: 300px;
@@ -57,6 +39,23 @@
       border-radius: 4px;
       top: -5px;
     }
+  }
+
+  h3.title{
+    float:left;
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    line-height: normal;
+    padding: 10px 0;
+    margin: 0;
+    border-bottom: 1px solid rgba(0,0,0,0.5);
+    font-family: $handWritten;
+    transition: all 0.4s;
+  }
+
+  &.active {
+    right: 0;
   }
 
   .user_block{

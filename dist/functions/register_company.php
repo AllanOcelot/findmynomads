@@ -29,14 +29,31 @@
       if( $query->rowCount() > 0 ) {
         echo "The company email is already in use, please try another.";
       } else {
-        //Email does not exist, we create user.
-        echo "we get this far";
-        $sql = "INSERT INTO companies (company_name , email , pass  ) VALUES ('$company_name', '$company_email' , '$password_hashed' )";
 
+
+        //We create the company, that is to say, we create a row of data in the database that represents this company and it's information
         $sql_insert = "INSERT INTO companies(company_name, email, pass ) VALUES ('$company_name', '$company_email' , '$password_hashed' )";
 
+        //We execute the action, so that we can retreive the company ID from the listing and set it when creating the user.
         if($conn->exec($sql_insert) === false){
-          echo 'Error inserting the department.';
+          echo 'Error creating new company listing.';
+        }else{
+          echo "The new company $company_name is created";
+        }
+
+        $sql = "SELECT ID FROM companies WHERE company_name = ?";
+        $q = $conn->prepare($sql);
+        $q->bindValue( 1, $company_name );
+        $q->execute();
+        $q->setFetchMode(PDO::FETCH_ASSOC);
+        $company_generated_id = $q->fetch();
+        $company_generated_id = $company_generated_id['ID'];
+
+        //we Create a user, so that the 'company owner' can actually log in
+        $sql_insert = "INSERT INTO users (userName, role, pass, email, company_ID ) VALUES ('$company_name', 1,'$password_hashed','$company_email', '$company_generated_id' )";
+
+        if($conn->exec($sql_insert) === false){
+          echo 'Error creating new company listing.';
           return false;
         }else{
           echo "The new company $company_name is created";

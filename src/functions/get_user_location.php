@@ -1,41 +1,26 @@
 <?php
 session_start();
 
-  if(isset($_GET["submitted"])){
-    //Includes
-    include 'DB_companies.php';
+if(isset($_GET["submitted"])){
+  //Includes
+  include 'DB_companies.php';
 
-    //Get the user ID (In reference to the table)
-    $user_id     = $_SESSION['user_id'];
-    $user_type   = $_SESSION['type'];
+  //Get the user ID (In reference to the table)
+  $user_id     = $_SESSION['user_id'];
+  $user_type   = $_SESSION['type'];
 
-    // Check connection
-    if($conn->connect_error){
-      die("Connection failed: " . $conn->connect_error);
-    }else{
+  $query = $conn->prepare( "SELECT longitude, latitude FROM locations WHERE owner_ID = ? ORDER BY ID DESC LIMIT 1" );
+  $query->bindValue( 1, $user_id );
+  $query->execute();
 
-
-
-      if($_SESSION['type'] == 'digital_nomad'){
-        $result = $conn->query("SELECT current_location FROM users WHERE ID = '$user_id'");
-      }
-      if($_SESSION['type'] == 'company'){
-        $result = $conn->query("SELECT home_location FROM companies WHERE ID = '$user_id'");
-      }
-
-      if($result->num_rows > 0){
-        $result = $result->fetch_assoc();
-        //$current_location = explode("*", $result['current_location']);
-        echo json_encode($result);
-      }else{ 
-        echo "No location data";
-      }
-     $conn->close();
-    }
-
-  //Has item been submitted
-  }else{
-    echo "error";
-    return false;
+  if( $query->rowCount() > 0 ) {
+    //Here is the user's last known location
+    echo json_encode($query->fetch(PDO::FETCH_ASSOC));
+  } else {
+    //User does not seem to have a last known location
+    echo 'false';
   }
+}else{
+  echo false;
+}
 ?>

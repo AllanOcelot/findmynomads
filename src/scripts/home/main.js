@@ -13,6 +13,10 @@ function show_login_error(option){
   if(readCookie('user_login_attempts') >= 25){
     alert('Youve tried to log in more than 25 times. Try again tommorow.');
   }else{
+
+
+    //TODO - these should not be alerts, they should be styling the inputs with feedback etc.
+
     //User entered invalid syntax for their email
     if(option == 0.5){
       alert("You must select your type of account.");
@@ -42,6 +46,8 @@ function show_login_error(option){
       alert('Please ensure your details are correct');
     }
   }
+
+  alert(readCookie('user_login_attempts'));
 }
 
 function show_selection(item_to_display){
@@ -70,11 +76,6 @@ function check_company_name_valid(){
       }else{
         return false;
       }
-      //if(companyName.match(^[a-zA-Z0-9_\s]*S)){
-      //  return true;
-      //}else{
-      //  return false;
-      //}
     }
   }else{
     return false;

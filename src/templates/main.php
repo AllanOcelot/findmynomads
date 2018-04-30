@@ -15,30 +15,6 @@
 
       <div id='main_map'></div>
 
-      <div class='information-overlay'>
-        <h3 class='title'>FindMyNomads</h3>
-        <div class='user_block'>
-          <div class='main_user_avatar'></div>
-          <div class='user_content_container'>
-              <p>Hi <span class='user_name'></span>.</p>
-              <ul class='details'>
-                <li>Location: </li>
-                <li>Last Update: </li>
-                <li>Timezone: </li>
-              </ul>
-          </div>
-        </div>
-
-        <div class='sidebar-button-container'>
-          <div class='sidebar-button' id='update_location_button'>Update Location <i class='fa fa-map-pin' aria-hidden='true'></i></div>
-          <div class='sidebar-button' id='add-location-button'>Add Location <i class='fa fa-globe' aria-hidden='true'></i></div>
-          <div class='sidebar-button' id='add-travel-plan'>Travel Plans <i class='fa fa-plane' aria-hidden='true'></i></div>
-          <div class='sidebar-button' id='view-team'>Team Members<i class='fa fa-users' aria-hidden='true'></i></div>
-          <div class='sidebar-button' id='user-settings'>Edit Settings <i class='fa fa-sliders' aria-hidden='true'></i></div>
-          <div class='sidebar-button' id='log_out_button'>Log Out <i class='fa fa-sign-out' aria-hidden='true'></i></div>
-        </div>
-      </div>
-
       <div id='add_location_container'>
         <div class='close'>
           <i class='fa fa-times-circle' aria-hidden='true'></i>

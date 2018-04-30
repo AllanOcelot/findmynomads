@@ -1,7 +1,7 @@
 //All of our app takes place inside this container
-var appContainer = $('#find-my-nomads-main');
+var appContainer = $('body');
 
-var user_logged_in;
+var user_logged_in = '';
 var geocoder;
 
 
@@ -48,28 +48,21 @@ function createCookie(name,value,days) {
 //  **************************************************************************************************
 
 function check_user_session(){
-  /*
   $.ajax({
    type: "GET",
    data: {
      submitted :  true,
    },
-   url: "/functions/get_session.php",
+   url: "functions/get_session.php",
   })
   .done(function( data ) {
     if(data){
       user_logged_in = true;
-      console.log("Welcome back");
     }else{
       user_logged_in = false;
-      console.log("You do not exist.");
     }
     init_all();
   });
-  */
-
-  user_logged_in = false;
-  init_all();
 }
 
 
@@ -85,40 +78,35 @@ function check_user_session(){
 //Function to instigate everything
 function init_all(){
 
-  var myNode = document.getElementById("find-my-nomads-main");
-  while (myNode.firstChild) {
-      myNode.removeChild(myNode.firstChild);
-  }
-
+  //var myNode = document.getElementById("find-my-nomads-main");
+  //while (myNode.firstChild) {
+  //    myNode.removeChild(myNode.firstChild);
+  //}
   if(user_logged_in == true){
+
+    $('.introduction').remove();
 
     //The user goes to the 'map' page - our main page
     $.ajax({
      type: "GET",
-     url: "/templates/main.php",
+     url: "templates/main.php",
     })
     .done(function( data ) {
-      appContainer.append(data);
+      $('#find-my-nomads-main').remove();
+      $('body').prepend(data);
       window.setTimeout(function(){
-        $('#map_preloader').slideUp(300 , function (){
+
           resize_map($('#main_map'));
-          populate_userdata();
+          //populate_userdata();
           build_map();
-
-          $('#main_map').fadeIn(300 , function(){
-            $('.information-overlay').slideDown(300);
-          });
-
+          build_sidebar();
+          $('#main_map').fadeIn(300);
           //Once the map is built, always re center it on the 'current location' of the user
-
           //Get the user travel plans
           //get_user_travel_plans(check_user_session() , map);
 
-        });
       }, 1000);
     });
-
-
   // END OF LOGGED IN CODE
   }else{
   // START OF NOT LOGGED IN (HOME) CODE
@@ -128,12 +116,10 @@ function init_all(){
       url: "templates/home.php",
     }).done(function( data ) {
       //Add the template to the page
-      appContainer.append(data);
+      $('#find-my-nomads-main').html(data);
       //Show the default landing section
       show_selection("default");
     });
-
-
 
 
         /////////////////
@@ -145,26 +131,10 @@ function init_all(){
           show_selection("login");
         });
 
-        //Check the user has selected a valid choice
-        function validate_user_type(){
-          var input = $('#usr_type').val();
-          if(input == -1){
-            show_login_error(0.5);
-            return false;
-          }else{
-            if(input == 'digital_nomad' || input == 'company'){
-              return input;
-            }else{
-              return false;
-            }
-          }
-        }
-
         //Check the user input (email) containers no crazy or weird shit
         function validate_username_input(){
-          var input = $('#usr_email').val();
-          console.log(input);
-          if(input.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
+          var input = $('#usr_username').val();
+          if(input){
             return input;
           }else{
             show_login_error(1);
@@ -186,22 +156,23 @@ function init_all(){
         //Check all details have been provided. Check user details match server ones.
         function check_user(){
           //The user's input is correct, let's check if the user exits
-          if(validate_user_type() != false && validate_username_input() != null && validate_password_input() != null){
+          if(validate_username_input() != null && validate_password_input() != null){
             $.ajax({
              type: "GET",
              data: {
                submitted: true,
-               user_type: validate_user_type(),
                user_name: validate_username_input(),
                user_pass: validate_password_input(),
              },
-             url: "/functions/check_user.php",
+             url: "functions/check_user.php",
             })
             .done(function( data ) {
               //IF the data returned tells us it's all valid, continue to check_user_session as this will show the map page
-              console.log(data);
-              //check_user_session();
+              if(data == true) {
+                check_user_session();
+              }else{
 
+              }
             });
           }else{
             return false;
@@ -280,13 +251,31 @@ function init_all(){
     appContainer.on('click', '.go_home' , function(){
       show_selection('default');
     });
-
   }
 }
 
 
 
-
+function build_sidebar() {
+  if(!$('.information-overlay').length){
+    //Get all staff from this account's company and display their location
+    $.ajax({
+    type: "GET",
+    dataType: "html",
+    data: {
+      submitted :  true,
+    },
+    url: "templates/sidebar.php",
+    success: function (data) {
+        $('.main_map_container').append(data);
+        $('.information-overlay').addClass('active');
+    },
+    error: function (request, status, error) {
+        alert(request.responseText);
+    }
+   });
+  }
+}
 
 
 
@@ -302,8 +291,6 @@ function init_all(){
 
 //Build our for the first time
 function build_map(){
-
-
   //We will create the google map here.
   //First, where should we set the user's centre of the map to be on login.
   $.ajax({
@@ -312,119 +299,199 @@ function build_map(){
    data: {
      submitted :  true,
    },
-   url: "/functions/get_user_location.php",
-  })
-  .done(function( data ) {
-    var new_data = JSON.parse(data['current_location']);
+   url: "functions/get_user_location.php",
+   success: function (data) {
 
-    starting_location = new_data.location;
-    geocoder = new google.maps.Geocoder();
+     ///var new_data = JSON.parse(data['longlat']);
+     starting_location = new google.maps.LatLng(data['longitude'], data['latitude']);
+     geocoder = new google.maps.Geocoder();
 
-    map = new google.maps.Map(document.getElementById('main_map'), {
-      zoom: 4,
-      center: starting_location,
-      disableDefaultUI: true
-    });
+     map = new google.maps.Map(document.getElementById('main_map'), {
+       zoom: 4,
+       center: starting_location,
+       disableDefaultUI: true,
+       minZoom: 3,
+       maxZoom: 15
+     });
 
-    marker_current_position = new google.maps.Marker({
+     marker_current_position = new google.maps.Marker({
+         map:map,
+         draggable:true,
+         animation: google.maps.Animation.DROP,
+         position: starting_location,
+         icon: {
+           path: google.maps.SymbolPath.CIRCLE,
+           fillOpacity: 0.2,
+           fillColor: '#fff',
+           strokeOpacity: 1.0,
+           //strokeColor: data[i]['Colour'],
+           strokeWeight: 5.0,
+           scale: 20 //pixels
+         }
+     });
+
+     google.maps.event.addListener(marker_current_position, 'dragend', function(){
+       geocode_current_location_pin(marker_current_position.getPosition());
+       marker_current_position.setPosition(marker_current_position.getPosition());
+     });
+
+
+     //We want to draw all staff who belong to company X
+
+     //draw_all_staff_in_user_comapny();
+
+
+     // We use this to 'build' information about the location
+     /*
+     function geocode_current_location_pin(pos){
+        geocoder = new google.maps.Geocoder();
+        geocoder.geocode
+         ({
+             latLng: pos
+         },
+             function(results, status)
+             {
+                 if (status == google.maps.GeocoderStatus.OK)
+                 {
+                   map.setCenter(results[0].geometry.location);
+                   map.setZoom(18);
+
+                   var name;
+                   var city;
+                   var formatted;
+                   var place_id;
+                   var long = results[0].geometry.location.lng();
+                   var lat = results[0].geometry.location.lat();
+                   var new_longLat = {lat:lat,lng:long}
+                   var country_name;
+
+                   if(typeof results[0].address_components[1] !== 'undefined'){
+                     name = results[0].address_components[1].long_name;
+                   }else{
+                     name = "Undefined";
+                   }
+
+                   if(typeof results[0].address_components[2] !== 'undefined'){
+                     city = results[0].address_components[2].long_name;
+                   }else{
+                     city = "Undefined";
+                   }
+
+                   if(typeof results[0].place_id !== 'undefined'){
+                     place_id = results[0].place_id;
+                   }else{
+                     place_id = "Undefined";
+                   }
+
+                   if(results[0].address_components[6]){
+                     var country_name = results[0].address_components[6].long_name;
+                   }else{
+                     country_name = "undefined";
+                   }
+
+                   //This is the location that will be saved to the server
+                   update_location_object = {
+                     name : name,
+                     city : city,
+                     formatted : results[0].formatted_address,
+                     location : new_longLat,
+                     place_id : place_id,
+                   };
+
+                   $('#map_preloader').slideUp(300,function(){
+                     $('.update_location_information .location_name').text("" + city + ", " + country_name);
+                     //Display information about this location
+                     $('.information-overlay').addClass('hidden');
+                     $('.update_location_information').slideDown(300);
+                   });
+                 }
+                 else
+                 {
+                   console.log('error');
+                 }
+             }
+         );
+     }
+     */
+   },
+   error: function (request, status, error) {
+       alert(request.responseText);
+   }
+  });
+
+  //Get all staff from this account's company and display their location
+  $.ajax({
+  type: "GET",
+  dataType: "json",
+  data: {
+    submitted :  true,
+  },
+  url: "functions/get_staff_last_location.php",
+  success: function (data) {
+    data.forEach(function(item) {
+
+    staff_member_last_location = new google.maps.LatLng(item.latitude, item.longitude);
+
+    //Generate the image, via the user's provided email address and set it as the marker.
+    var image = 'https://www.gravatar.com/avatar/' + item.owner_email_hash + '?s=24';
+
+    var icon = {
+      url: image, // url
+      size: new google.maps.Size(24, 24),
+      scale: 1,
+      anchor: new google.maps.Point(12, 45),
+    };
+
+    marker_staff_last_position_image= new google.maps.Marker({
         map:map,
-        draggable:true,
+        draggable:false,
         animation: google.maps.Animation.DROP,
-        position: starting_location,
-        icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          fillOpacity: 0.2,
-          fillColor: '#fff',
-          strokeOpacity: 1.0,
-          //strokeColor: data[i]['Colour'],
-          strokeWeight: 5.0,
-          scale: 20 //pixels
-        }
+        position: staff_member_last_location,
+        icon: icon
     });
 
-    google.maps.event.addListener(marker_current_position, 'dragend', function(){
-      geocode_current_location_pin(marker_current_position.getPosition());
-      marker_current_position.setPosition(marker_current_position.getPosition());
-    });
-
-    draw_all_staff_in_user_comapny();
-
-    function geocode_current_location_pin(pos){
-       geocoder = new google.maps.Geocoder();
-       geocoder.geocode
-        ({
-            latLng: pos
-        },
-            function(results, status)
-            {
-                if (status == google.maps.GeocoderStatus.OK)
-                {
-                  /*  $("#mapSearchInput").val(results[0].formatted_address);
-                    $("#mapErrorMsg").hide(100); */
-                  //repositon map
-                  map.setCenter(results[0].geometry.location);
-                  map.setZoom(18);
-
-                  var name;
-                  var city;
-                  var formatted;
-                  var place_id;
-                  var long = results[0].geometry.location.lng();
-                  var lat = results[0].geometry.location.lat();
-                  var new_longLat = {lat:lat,lng:long}
-                  var country_name;
-
-                  if(typeof results[0].address_components[1] !== 'undefined'){
-                    name = results[0].address_components[1].long_name;
-                  }else{
-                    name = "Undefined";
-                  }
-
-                  if(typeof results[0].address_components[2] !== 'undefined'){
-                    city = results[0].address_components[2].long_name;
-                  }else{
-                    city = "Undefined";
-                  }
-
-                  if(typeof results[0].place_id !== 'undefined'){
-                    place_id = results[0].place_id;
-                  }else{
-                    place_id = "Undefined";
-                  }
-
-                  if(results[0].address_components[6]){
-                    var country_name = results[0].address_components[6].long_name;
-                  }else{
-                    country_name = "undefined";
-                  }
-
-                  //This is the location that will be saved to the server
-                  update_location_object = {
-                    name : name,
-                    city : city,
-                    formatted : results[0].formatted_address,
-                    location : new_longLat,
-                    place_id : place_id,
-                  };
-
-                  $('#map_preloader').slideUp(300,function(){
-                    $('.update_location_information .location_name').text("" + city + ", " + country_name);
-                    //Display information about this location
-                    $('.information-overlay').addClass('hidden');
-                    $('.update_location_information').slideDown(300);
-                  });
-                }
-                else
-                {
-                  console.log('error');
-                }
-            }
-        );
+    var icon = {
+        //path: "M950,295.4c-8.3,0-15,3.6-15,15.6c0,12,15,32.9,15,32.9s15-20.9,15-32.9C965,299,958.3,295.4,950,295.4z,M950,322.8c-6.6,0-12-5.4-12-12s5.4-12,12-12s12,5.4,12,12S956.6,322.8,950,322.8z",
+        //fillColor: '#FFF',
+        //fillOpacity: 1,
+        url : "images/icons/pin_icon.png",
+        strokeWeight: 0,
+        size: new google.maps.Size(30, 49),
+        scaledSize: new google.maps.Size(30, 49),
+        anchor: new google.maps.Point(15,49) // anchor
     }
 
+    var marker = new google.maps.Marker({
+        position: staff_member_last_location,
+        map: map,
+        draggable: false,
+        icon: icon
+    });
 
-  });
+
+    //When clicked, use this ID to look up the location and populate our box;
+    //marker_staff_last_position.location_ID = item.ID;
+
+    //marker_staff_last_position.addListener('click', function() {
+    //    console.log(this.location_ID);
+    //});
+
+
+
+    });
+    //Once all the map data has been generated, we get the sidebar.
+
+    $('.information-overlay').addClass('active');
+    //Hide the preloader
+    $('#map_preloader').slideUp(200);
+  },
+  error: function (request, status, error) {
+      alert(request.responseText);
+  }
+ });
 }
+
+
 
 //Resize our map to be fullscreen
 function resize_map(map){
@@ -571,8 +638,9 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
 
 
   //If the user clicks to update their current position
-  appContainer.on('click', '#update_location_button', function(){
+  $('body').on('click', '#update_location_button', function(){
     //Hide the information sidebar
+    alert('clicked');
     $('.information-overlay').addClass('hidden');
     $('#map_preloader').fadeIn(300);
     update_user_location();
@@ -617,24 +685,6 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
     $('.information-overlay').addClass('hidden');
     $('.update_user_settings').fadeIn(600);
   });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -752,15 +802,6 @@ function populate_userdata(){
     }
   });
 }
-
-
-
-
-
-
-
-
-
 
 //////////////////
 //////// THE TRAVEL PLAN SECTION
@@ -920,38 +961,16 @@ function get_user_travel_plans(){
     });
   }
 
-  //allan
-
-
 
  function display_team_members_panel(){
    $('.information-overlay').addClass('hidden');
  }
 
 
-
-
-
-
-
-
-
-
   //////// When user clicks on 'View Team'
   appContainer.on('click', '#view-team', function(){
     display_team_members_panel();
   });
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -968,6 +987,7 @@ function get_user_travel_plans(){
 
 //No matter where the user is, if they press the log out button, do so.
 appContainer.on('click', '#log_out_button', function(){
+  console.log('try to log out');
   log_out_user();
 });
 
@@ -977,10 +997,9 @@ function log_out_user(){
    data: {
      submitted :  true,
    },
-   url: "/functions/function_logout.php",
+   url: "functions/function_logout.php",
   })
   .done(function( data ) {
-    alert(data);
-    //init_all();
+    init_all();
   });
 }

@@ -21,16 +21,8 @@
           <h3>Login </h3>
           <form action=''>
             <div class='input-container'>
-              <label for='usr_type'>I am a...</label>
-              <select id='usr_type' class='text usr_type'>
-                <option value='-1'>Please select</option>
-                <option value='digital_nomad'>Digital Nomad</option>
-                <option value='company'>Team Owner</option>
-              </select>
-            </div>
-            <div class='input-container'>
-              <label for='usr_email'>Email Address:</label>
-              <input type='text' name='usr_email' class='text' id='usr_email' placeholder='Please enter your email address'>
+              <label for='usr_email'>Username:</label>
+              <input type='text' name='usr_username' class='text' id='usr_username' placeholder='Please enter your username'>
             </div>
             <div class='input-container'>
               <label for='usr_pass'>Password:</label>

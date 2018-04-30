@@ -247,17 +247,14 @@ body.home .introduction.active {
 .information-overlay {
   position: fixed;
   width: 323px;
-  left: 0;
+  right: -323px;
   top: 0;
   height: 100%;
   background-color: #fff;
-  border-radius: 0 4px 4px 0;
-  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
   z-index: 200;
-  display: none;
   overflow: hidden;
   color: #000;
-  transition: all 0.5s; }
+  transition: all 0.2s; }
 
 .information-overlay.hidden {
   left: -100%;
@@ -265,18 +262,6 @@ body.home .introduction.active {
   width: 0px;
   height: 0px;
   transition: left 0.3s all 1s; }
-
-.information-overlay h3.title {
-  float: left;
-  width: 100%;
-  text-align: center;
-  font-size: 30px;
-  line-height: normal;
-  padding: 10px 0;
-  margin: 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-  font-family: "Pacifico", cursive;
-  transition: all 0.4s; }
 
 .information-overlay.hidden h3.title {
   position: fixed;
@@ -294,6 +279,21 @@ body.home .introduction.active {
   transition: all 0.3s;
   border-radius: 4px;
   top: -5px; }
+
+.information-overlay h3.title {
+  float: left;
+  width: 100%;
+  text-align: center;
+  font-size: 30px;
+  line-height: normal;
+  padding: 10px 0;
+  margin: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+  font-family: "Pacifico", cursive;
+  transition: all 0.4s; }
+
+.information-overlay.active {
+  right: 0; }
 
 .information-overlay .user_block {
   float: left;
