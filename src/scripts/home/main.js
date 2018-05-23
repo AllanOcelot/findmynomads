@@ -1,53 +1,57 @@
 //I don't want to bombard the server, so we only run checks on inputs after 5 seconds
 var lastTimeSinceUserInput = 5000;
 
+function show_alert(dom_element_to_show){
+    dom_element_to_show.addClass('active');
+}
+
 function show_login_error(option){
+    var alert_login = $('.alert');
 
   //We check to see if our login error cookie appears
   if(readCookie('user_login_attempts') == null){
     //The user has no login attemps, so we create one
     // It has a value of 0 and lasts for one day.
     createCookie('user_login_attempts' , 0 , 1);
+  }else{
+    // If itr does exist, bind it to a variable so we can increase login attempts
+    var login_attempts_val = parseInt(readCookie('user_login_attempts')) + 1;
   }
 
   if(readCookie('user_login_attempts') >= 25){
-    alert('Youve tried to log in more than 25 times. Try again tommorow.');
+    alert_login.text('Youve tried to log in more than 25 times. Try again tommorow.');
+    $('#attempt_login').remove();
   }else{
-
-
     //TODO - these should not be alerts, they should be styling the inputs with feedback etc.
-
     //User entered invalid syntax for their email
     if(option == 0.5){
-      alert("You must select your type of account.");
+      alert_login.text("You must select your type of account.");
     }
     //User entered invalid syntax for their email
-    if(option == 1){
-      alert("It looks like your email address is not valid.");
-    }
-    //User does not exist
-    if(option == 2){
-      alert("Used does not exist");
+    if(option == 1 || option == 2){
+      alert_login.text("Please check you have entered a correct Username.");
     }
     //User has not completed all fields on the register form
     if(option == 5){
-      alert('Not all fields on register are completed');
+      alert_login.text('Please ensure all fields are completed');
     }
     if(option == 6){
-      alert('Company name is not valid');
+      alert_login.text('Company name is not valid');
     }
     if(option == 7){
-      alert('No valid email address provided.')
+      alert_login.text('No valid email address provided.')
     }
     if(option == 8){
-      alert('Password needs to be longer than five charactrs');
+      alert_login.text('Please check your password is correct.');
     }
     if(option == 9){
-      alert('Please ensure your details are correct');
+      alert_login.text('Please ensure your details are correct');
     }
   }
 
-  alert(readCookie('user_login_attempts'));
+    createCookie('user_login_attempts' , login_attempts_val  , 1);
+    show_alert(alert_login);
+    console.log(login_attempts_val);
 }
 
 function show_selection(item_to_display){

@@ -143,6 +143,29 @@ body{
 
     }
   }
+
+    &.map_view {
+        overflow: hidden;
+    }
+
+
+  .alert {
+    float: left;
+    width: 100%;
+    padding: 20px;
+    background-color: #d25b5b;
+    color: #fff;
+    text-align: left;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #000;
+    display: none;
+
+    &.active {
+        display: block;
+    }
+  }
+
 }
 
 ///Made by banner

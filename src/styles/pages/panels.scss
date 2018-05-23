@@ -1,0 +1,254 @@
+////
+//// Styling relating to all the panels
+
+.panel {
+	position: fixed;
+	left: -200%;
+	z-index: 100;
+	background-color: #fff;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	color: #000;
+	transition: all 0.5s;
+	transition-timing-function: ease-out;
+
+
+	// Title section
+    .title-container {
+        float: left;
+        width: 100%;
+        position: relative;
+        border-bottom: 2px solid rgba(0,0,0,0.5);
+        background: #1f1f1f;
+        color: #fff;
+        height: 10%;
+        max-height: 10%;
+
+        .title {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            margin-top: -20px;
+            height: 40px;
+            line-height: 40px;
+            font-size: 2em;
+        }
+
+        .close-panel-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            margin-top: -16px;
+            height: 32px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 2em;
+        }
+    }
+
+	//Wrapper to contain all of the content inside the panel
+	.panel-content-container {
+		float: left;
+		width: 100%;
+		height: auto;
+		padding: 0 20px 0;
+
+		//Introduciton content, above the main panel content
+		.introduction {
+			float: left;
+			width: 100%;
+			height: auto;
+			text-align: left;
+			opacity: 1;
+			padding: 20px 0 ;
+			color: rgb(17, 16, 16);
+			height: 15%;
+
+			.title {
+				font-size: 2em;
+			}
+
+			p {
+				font-size: 1em;
+				margin: 0 0 10px 0
+			}
+		}
+
+		.scroll_container {
+			float: left;
+			width: 100%;
+			height: 65%;
+			//max-height: 300px;
+			overflow-x: hidden;
+			overflow-y: scroll;
+			background: #fbfbfb;
+
+			.item {
+				float: left;
+				width: 19%;
+				height: 0px;
+				padding-top: 24%;
+				position: relative;
+				margin-right: 1%;
+				margin-bottom: 1%;
+				background-size: cover;
+				background-repeat: no-repeat;
+				background-position: center center;
+                border-radius: 3px 3px 0 0;
+                border: 1px solid rgba(0,0,0,0.2);
+				color: #fff;
+				opacity: 1;
+				transition: all 0.3s;
+				overflow: hidden;
+
+				//Default shadow shown to improve text legability
+				&::before {
+					content: '';
+					width: 100%;
+					height: 60%;
+					bottom: -10%;
+					left: 0;
+					z-index: 2;
+					position: absolute;
+					background: linear-gradient(to top, #000, transparent);
+					transition: all 0.3s;
+				}
+
+				//Shadow that displays on hover
+				&::after {
+					content: '';
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					background-color: rgba(0,0,0,0.5);
+					opacity: 0;
+					z-index: 2;
+					transition: all 0.5s;
+				}
+
+				.user_details {
+					position: absolute;
+					bottom: 20px;
+					left: 20px;
+					padding: 0 20px 0 0;
+					height: auto;
+					z-index: 10;
+					transition: all 0.3s;
+
+					div {
+						float: left;
+						width: 100%;
+						margin-bottom: 10px;
+						text-shadow: 1px 1px 1px #000;
+					}
+
+					.name {
+						font-size: 1em;
+						font-weight: 600;
+						cursor: default;
+					}
+				}
+
+				.actions {
+					position: absolute;
+					bottom: -100%;
+					opacity: 0;
+					width: 100%;
+					z-index: 5;
+					border-top: 1px solid #fff;
+					transition: all 0.3s;
+					text-align: center;
+
+					.action {
+						float: left;
+						width: 33.3%;
+						font-size: 2em;
+						text-shadow: 1px 1px 1px #000;
+						cursor: pointer;
+
+						i {
+							line-height: 100px;
+						}
+
+						&:hover {
+							background: rgba(255, 255, 255, 0.2);
+							transition: all 0.3s;
+						}
+					}
+				}
+
+				&:hover {
+					opacity: 1;
+					box-shadow: 0px 4px 2px rgba(0,0,0,0.2);
+
+					.user_details {
+						bottom: 120px;
+					}
+
+					.actions {
+						opacity: 1;
+						bottom: 0;
+						transition: all 0.3s;
+					}
+
+					//Hide default shadow
+					&::before {
+						opacity: 0;
+					}
+
+					//Show overlay shadow
+					&::after {
+						opacity: 1;
+					}
+				}
+			}
+		}
+
+        .button-container {
+            float: left;
+            width: 100%;
+            padding: 1% 0 1% 0;
+            height: 10%;
+            border-top: 2px solid #1f1f1f;
+
+            .info {
+                float: left;
+                width: auto;
+            }
+
+            .button {
+                float: right;
+                width: auto;
+                border: 2px solid #1f1f1f;
+                color: #1f1f1f;
+                line-height: 50px;
+                padding: 0 20px;
+                cursor: pointer;
+                margin-right: 10px;
+                transition: all 0.3s;
+                &:hover {
+                    background: #c1e64f;
+                    border-color: #c1e64f;
+                }
+            }
+        }
+
+
+	}
+
+    &.right {
+        padding: 0 250px 0 0;
+    }
+
+    &.left {
+        padding: 0 0 0 250px;
+    }
+
+	&.active {
+		left: 0;
+		transition-timing-function: ease-in;
+	}
+}

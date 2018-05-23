@@ -19,7 +19,7 @@
       <div class='introduction login'>
         <div class='form-container'>
           <h3>Login </h3>
-          <form action=''>
+          <form id='login_form' method='GET'>
             <div class='input-container'>
               <label for='usr_email'>Username:</label>
               <input type='text' name='usr_username' class='text' id='usr_username' placeholder='Please enter your username'>
@@ -28,9 +28,10 @@
               <label for='usr_pass'>Password:</label>
               <input type='password' name='usr_pass' class='text' id='usr_pass' placeholder=''>
             </div>
+            <div class='alert'></div>
             <div class='button-container'>
               <div class='app-button go_home back'>Back?</div>
-              <input type='text' class='app-button next' id='attempt_login' value='Login'>
+              <input type='submit' class='app-button next' id='attempt_login' value='Login'>
             </div>
           </form>
         </div>
@@ -58,9 +59,11 @@
             <input type='password' name='new_company_password' class='text' id='new_company_password' placeholder=''>
           </div>
 
+          <div class='alert'></div>
+
           <div class='button-container'>
             <div class='app-button go_home back'>Back?</div>
-            <input type='text' class='app-button next' id='attempt_create_new' value='Register'>
+            <input type='submit' class='app-button next' id='attempt_create_new' value='Register'>
           </div>
 
           </form>

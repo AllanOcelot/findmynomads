@@ -102,9 +102,9 @@ function init_all(){
     .done(function( data ) {
       $('#find-my-nomads-main').remove();
       $('body').prepend(data);
-      window.setTimeout(function(){
 
-          resize_map($('#main_map'));
+
+          resize_map();
           //populate_userdata();
           build_map();
           build_sidebar();
@@ -113,7 +113,7 @@ function init_all(){
           //Get the user travel plans
           //get_user_travel_plans(check_user_session() , map);
 
-      }, 1000);
+
     });
   // END OF LOGGED IN CODE
   }else{
@@ -136,6 +136,7 @@ function init_all(){
 
         //User clicks to display the login form
         appContainer.on('click', '.request-login', function(){
+          $('.alert').removeClass('active');
           show_selection("login");
         });
 
@@ -188,7 +189,8 @@ function init_all(){
         }
 
         //If user clicks the login button , check if their details are ok
-        appContainer.on('click', '#attempt_login', function(){
+        appContainer.on('submit', '#login_form', function(e){
+          e.preventDefault();
           check_user();
         });
 
@@ -209,12 +211,12 @@ function init_all(){
 
       //user clicks register button
       appContainer.on('click', '.request-register', function(){
+        $('.alert').removeClass('active');
         show_selection("register");
       });
 
       appContainer.on('click', '#attempt_create_new', function(){
         //Before we bother with checking server side, let's do some basic checks
-
         //Check all the fields are provided
         if($('#company_name').val() && $('#new_email_address').val() && $('#new_company_password').val()){
           //They have entered details for each,
@@ -223,9 +225,6 @@ function init_all(){
             if(check_company_email_valid()){
               //Check they have provided a password
               if(check_company_password_valid()){
-                console.log( $('#company_name').val() );
-                console.log( $('#new_email_address').val() );
-                console.log( $('#new_company_password').val() );
                 //Create the account
                 $.ajax({
                  type: "GET",
@@ -238,10 +237,8 @@ function init_all(){
                  url: "functions/register_company.php",
                 })
                 .done(function( data ) {
-                    console.log(data);
                 });
               }else{
-                alert('error at register script');
                 show_login_error(8);
               }
             }else{
@@ -250,7 +247,6 @@ function init_all(){
           }else{
             show_login_error(6);
           }
-
         }else{
           show_login_error(5);
         }
@@ -276,7 +272,9 @@ function build_sidebar() {
     url: "templates/sidebar.php",
     success: function (data) {
         $('.main_map_container').append(data);
+		preloader_hide();
         $('.information-overlay').addClass('active');
+        resize_map();
     },
     error: function (request, status, error) {
         alert(request.responseText);
@@ -429,52 +427,55 @@ function build_map(){
 
   //Get all staff from this account's company and display their location
   $.ajax({
-  type: "GET",
-  dataType: "json",
-  data: {
-    submitted :  true,
-  },
-  url: "functions/get_staff_last_location.php",
-  success: function (data) {
-    data.forEach(function(item) {
+    type: "GET",
+    dataType: "json",
+    data: {
+      submitted :  true,
+    },
+    url: "functions/get_staff_last_location.php",
+    success: function (data) {
+      data.forEach(function(item) {
 
-    staff_member_last_location = new google.maps.LatLng(item.latitude, item.longitude);
+      console.log(data);
 
-    //Generate the image, via the user's provided email address and set it as the marker.
-    var image = 'https://www.gravatar.com/avatar/' + item.owner_email_hash + '?s=24';
+      staff_member_last_location = new google.maps.LatLng(item.latitude, item.longitude);
+      console.log( staff_member_last_location);
 
-    var icon = {
-      url: image, // url
-      size: new google.maps.Size(24, 24),
-      scale: 1,
-      anchor: new google.maps.Point(12, 45),
-    };
+      //Generate the image, via the user's provided email address and set it as the marker.
+      var image = 'https://www.gravatar.com/avatar/' + item.email_hash + '?s=50';
 
-    marker_staff_last_position_image= new google.maps.Marker({
+      var icon = {
+        url: image, // url
+        size: new google.maps.Size(50, 50),
+        //scale: 1,
+        anchor: new google.maps.Point(25, 90),
+      };
+
+      marker_staff_last_position_image= new google.maps.Marker({
         map:map,
         draggable:false,
-        animation: google.maps.Animation.DROP,
+        //animation: google.maps.Animation.DROP,
         position: staff_member_last_location,
         icon: icon
-    });
+      });
 
-    var icon = {
-        //path: "M950,295.4c-8.3,0-15,3.6-15,15.6c0,12,15,32.9,15,32.9s15-20.9,15-32.9C965,299,958.3,295.4,950,295.4z,M950,322.8c-6.6,0-12-5.4-12-12s5.4-12,12-12s12,5.4,12,12S956.6,322.8,950,322.8z",
-        //fillColor: '#FFF',
-        //fillOpacity: 1,
-        url : "images/icons/pin_icon.png",
-        strokeWeight: 0,
-        size: new google.maps.Size(30, 49),
-        scaledSize: new google.maps.Size(30, 49),
-        anchor: new google.maps.Point(15,49) // anchor
-    }
+        var icon = {
+            //path: "M950,295.4c-8.3,0-15,3.6-15,15.6c0,12,15,32.9,15,32.9s15-20.9,15-32.9C965,299,958.3,295.4,950,295.4z,M950,322.8c-6.6,0-12-5.4-12-12s5.4-12,12-12s12,5.4,12,12S956.6,322.8,950,322.8z",
+            //fillColor: '#FFF',
+            //fillOpacity: 1,
+            url : "images/icons/pin_icon.png",
+            strokeWeight: 0,
+            //size: new google.maps.Size(150, 100),
+            scaledSize: new google.maps.Size(50, 100),
+            anchor: new google.maps.Point(25,100) // anchor
+        }
 
-    var marker = new google.maps.Marker({
-        position: staff_member_last_location,
-        map: map,
-        draggable: false,
-        icon: icon
-    });
+        var marker = new google.maps.Marker({
+            position: staff_member_last_location,
+            map: map,
+            draggable: false
+            //icon: icon
+        });
 
 
     //When clicked, use this ID to look up the location and populate our box;
@@ -490,8 +491,11 @@ function build_map(){
     //Once all the map data has been generated, we get the sidebar.
 
     $('.information-overlay').addClass('active');
-    //Hide the preloader
-    $('#map_preloader').slideUp(200);
+
+
+    //Once built, resize the map to fit the screen
+    resize_map();
+
   },
   error: function (request, status, error) {
       alert(request.responseText);
@@ -502,9 +506,19 @@ function build_map(){
 
 
 //Resize our map to be fullscreen
-function resize_map(map){
-  map.css('height', $(window).height());
-  map.css('width',  $(window).width());
+function resize_map(){
+    var map = $('#main_map');
+    var window_width  =  window.innerWidth;
+    var sidebar_width =  $('.information-overlay').width();
+
+    //Exception - on mobile devices we want the map to be 100% width
+	if(window_width < 960 ){
+		map.css('width', '100%');
+        map.css('margin-left', '0px');
+	}else{
+        map.css('width',  window_width - sidebar_width);
+        map.css('margin-left', sidebar_width);
+    }
 }
 
 //Recentre the camera on a new long lat value
@@ -569,8 +583,6 @@ function codeAddress() {
 
          map.setCenter(newLatLong);
          map.setZoom(12);
-
-
        });
 
 
@@ -631,11 +643,49 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
 /////////////////
 ////// MAIN FUNCTIONS ( Sidebar buttons )
 
-  //Open add new location
-  appContainer.on('click', '#add-location-button', function(){
-    $('.information-overlay').addClass('hidden');
-    $('#add_location_container').addClass('active');
-  });
+	// Active state for sidebar buttons
+	appContainer.on('click', '.sidebar-button', function(){
+		var this_button = $(this);
+
+
+		if(this_button.hasClass('active')){
+			// Do nothing, we want users to click on a close icon
+		}else{
+			$('.sidebar-button.active').removeClass('active');
+			this_button.addClass('active');
+		}
+	});
+
+    //Open add new location
+    appContainer.on('click', '#add-location-button', function(){
+      $('.information-overlay').addClass('hidden');
+      $('#add_location_container').addClass('active');
+    });
+
+	// When user clicks on 'View Team'
+	appContainer.on('click', '#view-team', function(){
+	  display_panel('team');
+	});
+
+    // When user clicks on 'View Team'
+    appContainer.on('click', '#user-settings', function(){
+      display_panel('settings');
+    });
+
+    //Close panels
+    function close_panels(){
+        var panel = $('.panel');
+        panel.removeClass('active');
+        $('.sidebar-button.active').removeClass('active');
+        window.setTimeout(function(){
+            panel.html();
+        }, 500);
+    }
+    appContainer.on('click', '.close-panel-icon', function(){
+        close_panels();
+    });
+
+
   //Close add new location
   appContainer.on('click' , '#add_location_container .close', function(){
     $('#add_location_container').fadeOut(600, function(){
@@ -648,9 +698,8 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
   //If the user clicks to update their current position
   $('body').on('click', '#update_location_button', function(){
     //Hide the information sidebar
-    alert('clicked');
     $('.information-overlay').addClass('hidden');
-    $('#map_preloader').fadeIn(300);
+    preloader_show();
     update_user_location();
   });
 
@@ -662,11 +711,12 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
      //dataType:"json",
      data: {
        submitted :  true,
-       new_location :  JSON.stringify(update_location_object),
+       new_location :  update_location_object,
      },
-     url: "/functions/update_user_location.php",
+     url: "functions/update_user_location.php",
     })
     .done(function( data ) {
+      console.log( data );
       map.setZoom(4);
       $('.update_location_information').fadeOut(300, function(){
         $('.information-overlay').removeClass('hidden');
@@ -723,7 +773,6 @@ function update_user_location(){
           var lat = results[0].geometry.location.lat();
           var new_longLat = {lat:lat,lng:long}
 
-
           marker_current_position.setPosition(new_longLat);
 
           var name;
@@ -770,7 +819,7 @@ function update_user_location(){
           };
 
 
-          $('#map_preloader').slideUp(300,function(){
+          $('#map_preloader').slideUp(200,function(){
             $('.update_location_information .location_name').text("" + city + ", " + country_name);
             //Display information about this location
             $('.update_location_information').slideDown(300);
@@ -787,6 +836,36 @@ function update_user_location(){
   }
 }
 
+////////// Display and hide the preloader functions
+function preloader_show() {
+    var sidebar = $('.information-overlay');
+    var preloader = $('#map_preloader');
+
+    //If the sidebar is visible, calculate the width, and offset it depending is the sidebar is left or right aligned
+    if(sidebar.length){
+        if(sidebar.hasClass('left')){
+            preloader.css('left', sidebar.width());
+            preloader.css('right', 'auto');
+        }
+        if(sidebar.hasClass('right')){
+            preloader.css('right', sidebar.width());
+            preloader.css('left', 'auto');
+        }
+    }
+
+    if(window.innerWidth > 960 ){
+        preloader.css('width', window.innerWidth - sidebar.width());
+    }else{
+        preloader.css('width', '100%');
+    }
+
+	preloader.fadeIn(200);
+
+}
+
+function preloader_hide() {
+	$('#map_preloader').fadeOut(200);
+}
 
 ////////// User account functions
 function populate_userdata(){
@@ -970,14 +1049,41 @@ function get_user_travel_plans(){
   }
 
 
- function display_team_members_panel(){
-   $('.information-overlay').addClass('hidden');
+
+// Function to display panels, based upon passed string
+ function display_panel(panel_to_display){
+    preloader_show();
+
+    if(panel_to_display == 'team'){
+        $.ajax({
+  			type: "GET",
+  			dataType: "html",
+  			data: {
+  			 submitted :  true,
+  			},
+  			url: "functions/panels/team.php",
+  			success: function (data) {
+               $('.panel').html('');
+  			   $('.panel').append(data);
+  			   $('.panel').addClass('active');
+  			   preloader_hide();
+  			},
+  			error: function (request, status, error) {
+  			   console.log(request.responseText);
+  			}
+  		});
+    }
  }
 
 
-  //////// When user clicks on 'View Team'
-  appContainer.on('click', '#view-team', function(){
-    display_team_members_panel();
+
+  // When clicking on a user location pin on the team panel, close the panel and centre the map on that user
+  appContainer.on('click', '.show_on_map', function(){
+    var item_data = $(this).data();
+    var user_location = new google.maps.LatLng(item_data.latitude, item_data.longitude);
+    map.setCenter(user_location);
+    map.setZoom(10);
+    close_panels();
   });
 
 
@@ -985,15 +1091,9 @@ function get_user_travel_plans(){
 
 
 
-//  ██╗******██████╗**██████╗******██████╗*██╗***██╗████████╗
-//  ██║*****██╔═══██╗██╔════╝*****██╔═══██╗██║***██║╚══██╔══╝
-//  ██║*****██║***██║██║**███╗****██║***██║██║***██║***██║***
-//  ██║*****██║***██║██║***██║****██║***██║██║***██║***██║***
-//  ███████╗╚██████╔╝╚██████╔╝****╚██████╔╝╚██████╔╝***██║***
-//  ╚══════╝*╚═════╝**╚═════╝******╚═════╝**╚═════╝****╚═╝***
-//  *********************************************************
 
-//No matter where the user is, if they press the log out button, do so.
+// Log Out
+// No matter where the user is, if they press the log out button, do so.
 appContainer.on('click', '#log_out_button', function(){
   console.log('try to log out');
   log_out_user();
@@ -1012,56 +1112,65 @@ function log_out_user(){
   });
 }
 
+// Window Resize
+$(window).resize(function(){
+  resize_map();
+});
+
 //I don't want to bombard the server, so we only run checks on inputs after 5 seconds
 var lastTimeSinceUserInput = 5000;
 
+function show_alert(dom_element_to_show){
+    dom_element_to_show.addClass('active');
+}
+
 function show_login_error(option){
+    var alert_login = $('.alert');
 
   //We check to see if our login error cookie appears
   if(readCookie('user_login_attempts') == null){
     //The user has no login attemps, so we create one
     // It has a value of 0 and lasts for one day.
     createCookie('user_login_attempts' , 0 , 1);
+  }else{
+    // If itr does exist, bind it to a variable so we can increase login attempts
+    var login_attempts_val = parseInt(readCookie('user_login_attempts')) + 1;
   }
 
   if(readCookie('user_login_attempts') >= 25){
-    alert('Youve tried to log in more than 25 times. Try again tommorow.');
+    alert_login.text('Youve tried to log in more than 25 times. Try again tommorow.');
+    $('#attempt_login').remove();
   }else{
-
-
     //TODO - these should not be alerts, they should be styling the inputs with feedback etc.
-
     //User entered invalid syntax for their email
     if(option == 0.5){
-      alert("You must select your type of account.");
+      alert_login.text("You must select your type of account.");
     }
     //User entered invalid syntax for their email
-    if(option == 1){
-      alert("It looks like your email address is not valid.");
-    }
-    //User does not exist
-    if(option == 2){
-      alert("Used does not exist");
+    if(option == 1 || option == 2){
+      alert_login.text("Please check you have entered a correct Username.");
     }
     //User has not completed all fields on the register form
     if(option == 5){
-      alert('Not all fields on register are completed');
+      alert_login.text('Please ensure all fields are completed');
     }
     if(option == 6){
-      alert('Company name is not valid');
+      alert_login.text('Company name is not valid');
     }
     if(option == 7){
-      alert('No valid email address provided.')
+      alert_login.text('No valid email address provided.')
     }
     if(option == 8){
-      alert('Password needs to be longer than five charactrs');
+      alert_login.text('Please check your password is correct.');
     }
     if(option == 9){
-      alert('Please ensure your details are correct');
+      alert_login.text('Please ensure your details are correct');
     }
   }
 
-  alert(readCookie('user_login_attempts'));
+    createCookie('user_login_attempts' , login_attempts_val  , 1);
+    show_alert(alert_login);
+    console.log(login_attempts_val);
 }
 
 function show_selection(item_to_display){

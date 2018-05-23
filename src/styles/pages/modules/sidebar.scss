@@ -5,8 +5,7 @@
 
 .information-overlay{
   position: fixed;
-  width: 323px;
-  right:-323px;
+  width: 250px;
   top:0;
   height: 100%;
   background-color: #fff;
@@ -49,8 +48,9 @@
     line-height: normal;
     padding: 10px 0;
     margin: 0;
-    border-bottom: 1px solid rgba(0,0,0,0.5);
+    border-bottom: 1px solid #1f1f1f;
     font-family: $handWritten;
+    height: 10%;
     transition: all 0.4s;
   }
 
@@ -62,29 +62,44 @@
     float: left;
     width: 100%;
     height: auto;
-    border-bottom: 1px solid #000;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    padding-right: 10px;
-    padding-left: 110px;
+    border-bottom: 1px solid #1f1f1f;
     position: relative;
 
     /////////////////
     /////// USER Details
 
     .main_user_avatar{
-      position: absolute;
-      width: 80px;
-      height: 80px;
-      top:50%;
-      left:10px;
-      margin-top: -40px;
-      border-radius: 50%;
+      width: 101%;
+      height: 200px;
       background-size: cover;
-      background-position: center top;
+      background-position: center center;
       background-repeat: no-repeat;
-      z-index: 200;
-      box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.6);
+      z-index:0;
+    }
+
+    .user_content_container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 10px;
+      color: #fff;
+      z-index: 10;
+      font-size: 14px;
+      font-weight: 600;
+      text-shadow: 2px 2px 1px #1f1f1f;
+      cursor: default;
+
+      .title {
+        float: left;
+        width: 100%;
+        font-size: 18px;
+        margin-bottom: 5px;
+      }
+
+      .info {
+        width: 100%;
+        margin: 0 0 5px 0;
+    }
     }
   }
 
@@ -92,45 +107,46 @@
 
   //Button Container
   .sidebar-button-container{
-    position: absolute;
-    bottom:0;
-    left:0;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: auto;
     margin: 0;
-    &:hover{
-      .sidebar-button{
-        opacity: 0.2;
-        transition: all 0.3s;
-      }
-    }
 
-    .sidebar-button{
-      float:left;
+    .sidebar-button {
       width: 100%;
       text-transform: uppercase;
-      color:#000;
+      color:#1f1f1f;
       letter-spacing: 1px;
       padding: 5% 20px;
       font-size: 14px;
       letter-spacing: 1px;
       font-weight: 900;
-      border-bottom: 1px solid #000;
+      border-bottom: 1px solid #1f1f1f;
       cursor: pointer;
-      transition: all 0.5s;
+      transition: all 0.25s;
 
-      i{
+      i {
         float:right;
         font-size: 18px;
       }
 
-      &:hover{
+      &:hover,
+	  &.active {
         opacity: 1;
-        background-color: rgba(0,0,0,0.9);
+        background-color: #1f1f1f;
         color: #fff;
-        padding-left: 40px;
-        transition: all 0.3s;
       }
+
+	  &:last-of-type {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          border-top: 1px solid #1f1f1f;
+          border-bottom: none;
+          align-self: flex-end;
+	  }
+
     }
   }
 
@@ -148,4 +164,14 @@
       margin: 0 0 10px 0;
     }
   }
+
+  &.left {
+    left: 0;
+  }
+
+  &.right {
+    right: 0;
+  }
+
+
 }

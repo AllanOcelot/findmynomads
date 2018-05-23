@@ -8,9 +8,11 @@
   $HTML .="
     <div class='main_map_container'>
       <div id='map_preloader'>
-        <div class='pre_loader'></div>
-        <h3>Loading</h3>
-        <p>Thank you for using FindMyNomads!</p>
+	  	<div class='preloader_wrapper'>
+			<div class='pre_loader'></div>
+	        <h3>Loading</h3>
+	        <p>Thank you for using FindMyNomads!</p>
+		</div>
       </div>
 
       <div id='main_map'></div>
@@ -52,7 +54,7 @@
         </div>
       </div>
 
-
+      <div class='panel left'></div>
     </div>
 
     <script type='text/javascript'>

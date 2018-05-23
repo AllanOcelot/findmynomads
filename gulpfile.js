@@ -2,8 +2,6 @@
 
 //Our required bits and bobs
   var gulp = require('gulp');
-  var browserSync = require('browser-sync').create();
-
   var concat = require('gulp-concat');
 
   //Minifiers
@@ -22,9 +20,6 @@
     return gulp.src('src/*.html')
       .pipe(htmlmin({collapseWhitespace: true}))
       .pipe(gulp.dest('dist'))
-      .pipe(browserSync.reload({
-         stream: true
-       }))
   });
 
 
@@ -57,22 +52,10 @@
     .pipe(concat('main.css'))
     .pipe(sass())
     .pipe(gulp.dest('dist/styles'))
-    .pipe(browserSync.reload({
-       stream: true
-     }))
-  });
-  
-  //browserSync Task
-  gulp.task('browserSync', function() {
-    browserSync.init({
-      server: {
-        baseDir: 'dist'
-      },
-    })
   });
 
 ///////// Watchers
-gulp.task('watch', ['browserSync' , 'minify-styling' , 'copy-php-files'],  function(){
+gulp.task('watch', ['minify-styling' , 'copy-php-files'],  function(){
   gulp.watch('src/images/*.*', ['minify-images']);
   gulp.watch('src/styles/**/*.scss', ['minify-styling']);
   gulp.watch('src/scripts/**/*.js', ['minify-js']);
