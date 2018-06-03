@@ -56,14 +56,16 @@ function show_login_error(option){
 
 function show_selection(item_to_display){
   $('.introduction').removeClass('active').css('display','none');
-  if(item_to_display == "default"){
+  $('.alert').removeClass('active');
+
+  if(!item_to_display){
     $('.introduction.default').css("display", "flex").addClass("active").hide().fadeIn();
-  }
-  if(item_to_display == "login"){
+  }else if(item_to_display == "login"){
     $('.introduction.login').css("display", "flex").addClass("active").hide().fadeIn();
-  }
-  if(item_to_display== "register"){
+    $('#usr_username').focus();
+  }else if(item_to_display== "register"){
     $('.introduction.register').css("display", "flex").addClass("active").hide().fadeIn();
+    $('#company_name').focus();
   }
 }
 

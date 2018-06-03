@@ -7,6 +7,9 @@ $login_valid = false;
     //Includes
     include 'DB_companies.php';
 
+    // The login should be set to false at the start, until proven otherwise
+    $login_valid = false;
+
     //We want to get all of the the users details.
     $stmt = $conn->prepare('SELECT ID, userName, pass, role, company_ID FROM users WHERE userName=:username');
     $stmt->bindParam(":username", $_GET['user_name']);
@@ -23,7 +26,7 @@ $login_valid = false;
         $login_valid = true;
       }
     }
-    echo $login_valid;  
+    echo $login_valid;
   }
     $conn = null;
 

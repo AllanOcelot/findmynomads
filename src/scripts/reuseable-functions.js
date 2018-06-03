@@ -118,7 +118,7 @@ function init_all(){
       //Add the template to the page
       $('#find-my-nomads-main').html(data);
       //Show the default landing section
-      show_selection("default");
+      show_selection();
     });
 
 
@@ -128,7 +128,6 @@ function init_all(){
 
         //User clicks to display the login form
         appContainer.on('click', '.request-login', function(){
-          $('.alert').removeClass('active');
           show_selection("login");
         });
 
@@ -172,10 +171,11 @@ function init_all(){
               if(data == true) {
                 check_user_session();
               }else{
-
+                show_login_error(9);
               }
             });
           }else{
+            show_login_error(9);
             return false;
           }
         }
@@ -245,7 +245,7 @@ function init_all(){
       });
     //Both sections have a 'go home' button
     appContainer.on('click', '.go_home' , function(){
-      show_selection('default');
+      show_selection();
     });
   }
 }
@@ -632,38 +632,6 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
 });
 
 
-/////////////////
-////// MAIN FUNCTIONS ( Sidebar buttons )
-
-	// Active state for sidebar buttons
-	appContainer.on('click', '.sidebar-button', function(){
-		var this_button = $(this);
-
-
-		if(this_button.hasClass('active')){
-			// Do nothing, we want users to click on a close icon
-		}else{
-			$('.sidebar-button.active').removeClass('active');
-			this_button.addClass('active');
-		}
-	});
-
-    //Open add new location
-    appContainer.on('click', '#add-location-button', function(){
-      $('.information-overlay').addClass('hidden');
-      $('#add_location_container').addClass('active');
-    });
-
-	// When user clicks on 'View Team'
-	appContainer.on('click', '#view-team', function(){
-	  display_panel('team');
-	});
-
-    // When user clicks on 'View Team'
-    appContainer.on('click', '#user-settings', function(){
-      display_panel('settings');
-    });
-
     //Close panels
     function close_panels(){
         var panel = $('.panel');
@@ -673,6 +641,7 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
             panel.html();
         }, 500);
     }
+
     appContainer.on('click', '.close-panel-icon', function(){
         close_panels();
     });
@@ -687,13 +656,6 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
   });
 
 
-  //If the user clicks to update their current position
-  $('body').on('click', '#update_location_button', function(){
-    //Hide the information sidebar
-    $('.information-overlay').addClass('hidden');
-    preloader_show();
-    update_user_location();
-  });
 
   //User has searched for a location, now they click on 'yes'
   appContainer.on('click','.update_location_information .yes', function(){
@@ -728,13 +690,6 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
     });
   });
 
-  //////////////////////
-  ////////// USER SETTINGS
-  appContainer.on('click', '#user-settings', function(){
-    //Fade in the user settings panel
-    $('.information-overlay').addClass('hidden');
-    $('.update_user_settings').fadeIn(600);
-  });
 
 
 
@@ -939,22 +894,6 @@ function get_user_travel_plans(){
         }
       }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       //Data about the plans
       var plan = {
         title: data[0],
@@ -973,10 +912,6 @@ function get_user_travel_plans(){
         var returnPath = {lat:lat,lng:long};
         return returnPath;
       }
-
-
-
-
 
     }else{
       console.log('Could not find a username to match id.');
@@ -1046,6 +981,8 @@ function get_user_travel_plans(){
  function display_panel(panel_to_display){
     preloader_show();
 
+    $('.panel').html('');
+
     if(panel_to_display == 'team'){
         $.ajax({
   			type: "GET",
@@ -1055,7 +992,25 @@ function get_user_travel_plans(){
   			},
   			url: "functions/panels/team.php",
   			success: function (data) {
-               $('.panel').html('');
+  			   $('.panel').append(data);
+  			   $('.panel').addClass('active');
+  			   preloader_hide();
+  			},
+  			error: function (request, status, error) {
+  			   console.log(request.responseText);
+  			}
+  		});
+    }
+
+    if(panel_to_display == 'add_team_member'){
+        $.ajax({
+  			type: "GET",
+  			dataType: "html",
+  			data: {
+  			 submitted :  true,
+  			},
+  			url: "functions/panels/add_team_member.php",
+  			success: function (data) {
   			   $('.panel').append(data);
   			   $('.panel').addClass('active');
   			   preloader_hide();

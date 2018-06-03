@@ -126,7 +126,7 @@ function init_all(){
       //Add the template to the page
       $('#find-my-nomads-main').html(data);
       //Show the default landing section
-      show_selection("default");
+      show_selection();
     });
 
 
@@ -136,7 +136,6 @@ function init_all(){
 
         //User clicks to display the login form
         appContainer.on('click', '.request-login', function(){
-          $('.alert').removeClass('active');
           show_selection("login");
         });
 
@@ -180,10 +179,11 @@ function init_all(){
               if(data == true) {
                 check_user_session();
               }else{
-
+                show_login_error(9);
               }
             });
           }else{
+            show_login_error(9);
             return false;
           }
         }
@@ -253,7 +253,7 @@ function init_all(){
       });
     //Both sections have a 'go home' button
     appContainer.on('click', '.go_home' , function(){
-      show_selection('default');
+      show_selection();
     });
   }
 }
@@ -640,38 +640,6 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
 });
 
 
-/////////////////
-////// MAIN FUNCTIONS ( Sidebar buttons )
-
-	// Active state for sidebar buttons
-	appContainer.on('click', '.sidebar-button', function(){
-		var this_button = $(this);
-
-
-		if(this_button.hasClass('active')){
-			// Do nothing, we want users to click on a close icon
-		}else{
-			$('.sidebar-button.active').removeClass('active');
-			this_button.addClass('active');
-		}
-	});
-
-    //Open add new location
-    appContainer.on('click', '#add-location-button', function(){
-      $('.information-overlay').addClass('hidden');
-      $('#add_location_container').addClass('active');
-    });
-
-	// When user clicks on 'View Team'
-	appContainer.on('click', '#view-team', function(){
-	  display_panel('team');
-	});
-
-    // When user clicks on 'View Team'
-    appContainer.on('click', '#user-settings', function(){
-      display_panel('settings');
-    });
-
     //Close panels
     function close_panels(){
         var panel = $('.panel');
@@ -681,6 +649,7 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
             panel.html();
         }, 500);
     }
+
     appContainer.on('click', '.close-panel-icon', function(){
         close_panels();
     });
@@ -695,13 +664,6 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
   });
 
 
-  //If the user clicks to update their current position
-  $('body').on('click', '#update_location_button', function(){
-    //Hide the information sidebar
-    $('.information-overlay').addClass('hidden');
-    preloader_show();
-    update_user_location();
-  });
 
   //User has searched for a location, now they click on 'yes'
   appContainer.on('click','.update_location_information .yes', function(){
@@ -736,13 +698,6 @@ appContainer.on('click', '#search_new_location_button_try_again', function(){
     });
   });
 
-  //////////////////////
-  ////////// USER SETTINGS
-  appContainer.on('click', '#user-settings', function(){
-    //Fade in the user settings panel
-    $('.information-overlay').addClass('hidden');
-    $('.update_user_settings').fadeIn(600);
-  });
 
 
 
@@ -947,22 +902,6 @@ function get_user_travel_plans(){
         }
       }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       //Data about the plans
       var plan = {
         title: data[0],
@@ -981,10 +920,6 @@ function get_user_travel_plans(){
         var returnPath = {lat:lat,lng:long};
         return returnPath;
       }
-
-
-
-
 
     }else{
       console.log('Could not find a username to match id.');
@@ -1054,6 +989,8 @@ function get_user_travel_plans(){
  function display_panel(panel_to_display){
     preloader_show();
 
+    $('.panel').html('');
+
     if(panel_to_display == 'team'){
         $.ajax({
   			type: "GET",
@@ -1063,7 +1000,25 @@ function get_user_travel_plans(){
   			},
   			url: "functions/panels/team.php",
   			success: function (data) {
-               $('.panel').html('');
+  			   $('.panel').append(data);
+  			   $('.panel').addClass('active');
+  			   preloader_hide();
+  			},
+  			error: function (request, status, error) {
+  			   console.log(request.responseText);
+  			}
+  		});
+    }
+
+    if(panel_to_display == 'add_team_member'){
+        $.ajax({
+  			type: "GET",
+  			dataType: "html",
+  			data: {
+  			 submitted :  true,
+  			},
+  			url: "functions/panels/add_team_member.php",
+  			success: function (data) {
   			   $('.panel').append(data);
   			   $('.panel').addClass('active');
   			   preloader_hide();
@@ -1175,14 +1130,16 @@ function show_login_error(option){
 
 function show_selection(item_to_display){
   $('.introduction').removeClass('active').css('display','none');
-  if(item_to_display == "default"){
+  $('.alert').removeClass('active');
+
+  if(!item_to_display){
     $('.introduction.default').css("display", "flex").addClass("active").hide().fadeIn();
-  }
-  if(item_to_display == "login"){
+  }else if(item_to_display == "login"){
     $('.introduction.login').css("display", "flex").addClass("active").hide().fadeIn();
-  }
-  if(item_to_display== "register"){
+    $('#usr_username').focus();
+  }else if(item_to_display== "register"){
     $('.introduction.register').css("display", "flex").addClass("active").hide().fadeIn();
+    $('#company_name').focus();
   }
 }
 
@@ -1242,3 +1199,88 @@ function check_company_password_valid(){
 
     }
   });
+
+/////////////////
+////// ( Sidebar buttons )
+
+	// Active state for sidebar buttons
+	appContainer.on('click', '.sidebar-button', function(){
+		var this_button = $(this);
+
+		if(this_button.hasClass('active')){
+			// Do nothing, we want users to click on a close icon
+		}else{
+			$('.sidebar-button.active').removeClass('active');
+			this_button.addClass('active');
+		}
+	});
+
+    //Open add new location
+    appContainer.on('click', '#add-location-button', function(){
+      $('.information-overlay').addClass('hidden');
+      $('#add_location_container').addClass('active');
+    });
+
+	// When user clicks on 'View Team'
+	appContainer.on('click', '#view-team', function(){
+	  display_panel('team');
+	});
+
+    // When user clicks on 'View Team'
+    appContainer.on('click', '#user-settings', function(){
+      display_panel('settings');
+    });
+
+    //If the user clicks to update their current position
+    $('body').on('click', '#update_location_button', function(){
+      //Hide the information sidebar
+      $('.information-overlay').addClass('hidden');
+      preloader_show();
+      update_user_location();
+    });
+
+//These are all options that relate to the team panel page
+
+
+//When the user wants to add a new team member
+appContainer.on('click', '#add_new_team_member', function(e){
+    display_panel('add_team_member');
+});
+
+
+// If the user provides a valid email ( an email not in use ) we will register a new user in the DB, assigned to that company.
+appContainer.on('submit', '#create_new_nomad', function(e){
+    e.preventDefault();
+
+    //Check the user input
+    var user_input = $('#new_user_email').val();
+
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if(re.test(String(user_input).toLowerCase())){
+        alert('its an email address');
+    }else{
+        alert('not an email');
+    }
+
+    /*
+
+    $.ajax({
+     type: "GET",
+     data: {
+       submitted: true,
+       email: email_address_to_register,
+     },
+     url: "functions/check_user.php",
+    })
+    .done(function( data ) {
+      //IF the data returned tells us it's all valid, continue to check_user_session as this will show the map page
+      if(data == true) {
+        check_user_session();
+      }else{
+        show_login_error(9);
+      }
+    });
+
+    */
+
+});

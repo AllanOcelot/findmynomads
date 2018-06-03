@@ -10,13 +10,14 @@
 	height: 100%;
 	box-sizing: border-box;
 	color: #000;
+    display: flex;
+    flex-direction: column;
 	transition: all 0.5s;
 	transition-timing-function: ease-out;
 
 
 	// Title section
     .title-container {
-        float: left;
         width: 100%;
         position: relative;
         border-bottom: 2px solid rgba(0,0,0,0.5);
@@ -49,21 +50,19 @@
 
 	//Wrapper to contain all of the content inside the panel
 	.panel-content-container {
-		float: left;
-		width: 100%;
-		height: auto;
+		height: 90%;
 		padding: 0 20px 0;
+        display: flex;
+        flex-direction: column;
 
 		//Introduciton content, above the main panel content
 		.introduction {
-			float: left;
-			width: 100%;
-			height: auto;
 			text-align: left;
 			opacity: 1;
-			padding: 20px 0 ;
+			padding: 1% 0 ;
 			color: rgb(17, 16, 16);
-			height: 15%;
+			height: 20%;
+            width: 100%;
 
 			.title {
 				font-size: 2em;
@@ -76,10 +75,7 @@
 		}
 
 		.scroll_container {
-			float: left;
-			width: 100%;
 			height: 65%;
-			//max-height: 300px;
 			overflow-x: hidden;
 			overflow-y: scroll;
 			background: #fbfbfb;
@@ -208,10 +204,8 @@
 		}
 
         .button-container {
-            float: left;
-            width: 100%;
             padding: 1% 0 1% 0;
-            height: 10%;
+            height: 15%;
             border-top: 2px solid #1f1f1f;
 
             .info {
